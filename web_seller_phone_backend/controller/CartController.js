@@ -1,5 +1,6 @@
 import { addItem } from '../services/Cart/AddToCartService.js';
 import { updateItem } from '../services/Cart/UpdateCartItemService.js';
+import { removeItem } from '../services/Cart/RemoveCartItemService.js';
 
 const addToCart = async (req, res) => {
     const { userId, productId, quantity } = req.body;
@@ -19,7 +20,19 @@ const addToCart = async (req, res) => {
 };
 
 const removeCartItem = async (req, res) => {
-    // Code xử lý việc xóa sản phẩm khỏi giỏ hàng
+    const { userId, productId } = req.params; // Lấy userId và productId từ params của yêu cầu DELETE
+
+    if (!userId || !productId) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    try {
+        await removeItem(userId, productId); // Gọi hàm removeItem từ service để xóa sản phẩm khỏi giỏ hàng
+
+        return res.status(200).json({ message: 'Cart item removed successfully' });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 };
 
 const updateCartItem = async (req, res) => {

@@ -3,10 +3,10 @@ import { addToCart, removeCartItem, updateCartItem } from '../controller/CartCon
 
 const router = express.Router();
 
-router.post('/cart/add', addToCart); 
+router.post('/cart/add', addToCart); // POST /api/cart/add
 
-router.put('/cart/update/:id', updateCartItem); 
+router.put('/cart/update/:id', updateCartItem); // PUT /api/cart/update/:id
 
-router.delete('/cart/delete/:id', removeCartItem); 
+router.delete('/cart/delete/:userId/:productId', removeCartItem); // DELETE /api/cart/delete/:userId/:productId
 
 export default router;
