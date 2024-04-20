@@ -1,5 +1,3 @@
-// AddToCartService.js
-
 import Cart from '../../model/CartModel.js';
 
 const addItem = async (userId, productId, quantity) => {
