@@ -12,7 +12,6 @@ function HomePage() {
     const [products, setProducts] = useState([]);
     const [searchParams] = useSearchParams();
     const [hasFilteredProducts, setHasFilteredProducts] = useState(true); // Thêm biến state
-    console.log(products);
 
     // xử lí hiển thị tất cả sản phẩm
     useEffect(() => {
