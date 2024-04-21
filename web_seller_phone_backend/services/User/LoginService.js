@@ -1,10 +1,6 @@
 import User from '../../model/UserModel.js';
 import bcrypt from 'bcryptjs';
-<<<<<<< HEAD
-import { genneralAccessToken, genneralRefreshToken } from "../JwtService.js";
-=======
-import { generateAccessToken, generateRefreshToken } from "../JwtService.js"; // Assuming correct names
->>>>>>> Viet
+import { generateAccessToken, generateRefreshToken } from "../JwtService.js";
 
 const LoginUser = (userLogin) => {
     return new Promise(async (resolve, reject) => {
