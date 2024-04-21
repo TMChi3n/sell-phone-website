@@ -12,15 +12,16 @@ function HomePage() {
     const [products, setProducts] = useState([]);
     const [searchParams] = useSearchParams();
     const [hasFilteredProducts, setHasFilteredProducts] = useState(true); // Thêm biến state
+    console.log(products);
 
     // xử lí hiển thị tất cả sản phẩm
-    // useEffect(() => {
-    //     const fetchApi = async () => {
-    //         const result = await getAllProductRequest();
-    //         setProducts(result.data);
-    //     };
-    //     fetchApi();
-    // }, []);
+    useEffect(() => {
+        const fetchApi = async () => {
+            const result = await getAllProductRequest();
+            setProducts(result.data);
+        };
+        fetchApi();
+    }, []);
     // xử lí lọc sản phẩm
 
     useEffect(() => {
