@@ -39,3 +39,11 @@ export const filterRequest = async (category) => {
         console.log(error);
     }
 };
+export const getAllUserRequest = async () => {
+    try {
+        const res = await request.get('/api/get/users');
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};

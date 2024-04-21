@@ -9,7 +9,7 @@ import Search from '../Search';
 
 const cx = classNames.bind(styles);
 
-function Header() {
+function Header({ isHiddenSearch = false, isHiddenCart = false }) {
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -17,18 +17,23 @@ function Header() {
                     <img src={images.logo} alt="Logo"></img>
                 </div>
                 {/* search */}
-                <Search />
+                {isHiddenSearch ? <div /> : <Search />}
 
                 <div className={cx('action')}>
                     <Link to={'/sign-in'}>
                         <Button primary>Đăng nhập</Button>
                     </Link>
                 </div>
-                <div className={cx('cart')}>
-                    <Link to="/cart">
-                        <ShoppingCartOutlined />
-                    </Link>
-                </div>
+
+                {isHiddenCart ? (
+                    <div />
+                ) : (
+                    <div className={cx('cart')}>
+                        <Link to="/cart">
+                            <ShoppingCartOutlined />
+                        </Link>
+                    </div>
+                )}
             </div>
         </header>
     );
