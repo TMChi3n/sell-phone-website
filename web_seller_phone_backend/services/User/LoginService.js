@@ -1,46 +1,49 @@
 import User from '../../model/UserModel.js';
 import bcrypt from 'bcryptjs';
+<<<<<<< HEAD
 import { genneralAccessToken, genneralRefreshToken } from "../JwtService.js";
+=======
+import { generateAccessToken, generateRefreshToken } from "../JwtService.js"; // Assuming correct names
+>>>>>>> Viet
 
 const LoginUser = (userLogin) => {
-    return new Promise(async(resolve, reject) => {
-        const { username, email, password } = userLogin
-        try{
-            const checkUser = await User.findOne({
-                email: email
-            })
-            if (checkUser === null){
-                resolve({
+    return new Promise(async (resolve, reject) => {
+        const { email, password } = userLogin;
+        try {
+            const checkUser = await User.findOne({ email: email });
+            if (checkUser === null) {
+                resolve({ 
                     status: 'ERR',
                     message: 'The user is not defined'
-                })
+                });
+                return;
             }
-            const comparePassword = bcrypt.compareSync(password, checkUser.password)
-            if(!comparePassword){
-                relosve ({
-                    status:'ERR',
-                    message:'the password or user is incorrect ',
-                })
+            const comparePassword = bcrypt.compareSync(password, checkUser.password);
+            if (!comparePassword) {
+                resolve({ 
+                    status: 'ERR',
+                    message: 'The password or user is incorrect'
+                });
+                return;
             }
-            const access_token = await genneralAccessToken({
-                id_user:checkUser.id_user,
+            const access_token = await generateAccessToken({
+                id_user: checkUser.id_user,
                 isAdmin: checkUser.isAdmin
-            })
-            const refresh_token = await genneralAccessToken({
-                id_user:checkUser.id_user,
+            });
+            const refresh_token = await generateRefreshToken({
+                id_user: checkUser.id_user,
                 isAdmin: checkUser.isAdmin
-            })
-            resolve({
-                    status: 'OK',
-                    message: 'SUCCESS',
-                    access_token,
-                    refresh_token
-                })
-            
-            
-        }catch (e) {
-            reject(e)
+            });
+            resolve({ // Correct spelling of resolve
+                status: 'OK',
+                message: 'SUCCESS',
+                access_token,
+                refresh_token
+            });
+        } catch (e) {
+            reject(e);
         }
-    })}
+    });
+};
 
 export { LoginUser };
