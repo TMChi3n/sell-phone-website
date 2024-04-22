@@ -13,7 +13,7 @@ function SignUpPage() {
     };
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirm, setconfirm] = useState('');
+    const [userName, setUserName] = useState('');
 
     return (
         <div
@@ -29,17 +29,17 @@ function SignUpPage() {
                 <WrapperContainerLeft>
                     <h1>Xin chào</h1>
                     <p style={{ marginBottom: '50px' }}>Đăng kí tài khoản </p>
-                    <InputForm onChange={setEmail} value={email} style={{ marginBottom: '10px' }} placeholder="Email" />
-                    <InputForm onChange={setPassword} value={password} placeholder="password" />
                     <InputForm
-                        onChange={setconfirm}
-                        value={confirm}
+                        onChange={setUserName}
+                        value={userName}
                         style={{ marginTop: '10px' }}
                         placeholder="confirm password"
                     />
+                    <InputForm onChange={setEmail} value={email} style={{ marginBottom: '10px' }} placeholder="Email" />
+                    <InputForm onChange={setPassword} value={password} placeholder="password" />
 
                     <Button
-                        disable={!email || !password || !confirm ? true : false}
+                        disable={!email || !password || !userName ? true : false}
                         style={{ margin: '50px 0 10px' }}
                         primary
                     >
