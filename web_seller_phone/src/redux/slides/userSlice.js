@@ -4,6 +4,7 @@ const initialState = {
     name: '',
     email: '',
     access_token: '',
+    isAdmin: 'USER',
 };
 
 export const userSlice = createSlice({
@@ -11,10 +12,11 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            const { username, email, access_token } = action.payload;
+            const { username, email, access_token, isAdmin } = action.payload;
             state.name = username;
             state.email = email;
             state.access_token = access_token;
+            state.isAdmin = isAdmin;
         },
     },
 });
