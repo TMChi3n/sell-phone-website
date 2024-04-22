@@ -24,10 +24,11 @@ function SignInPage() {
             try {
                 const token = result?.access_token;
                 const decoded = jwtDecode(token);
+                console.log(decoded);
                 if (decoded) {
                     const fetchApi = async () => {
                         try {
-                            const resultUser = await getDetailUserRequest(decoded?.id_user, result?.access_token);
+                            const resultUser = await getDetailUserRequest(decoded?.userId, result?.access_token);
                             console.log(resultUser);
                             dispatch(setUser({ ...resultUser.data, access_token: token }));
                         } catch (e) {

@@ -24,7 +24,7 @@ function App() {
                     if (decoded) {
                         const fetchApi = async () => {
                             try {
-                                const resultUser = await getDetailUserRequest(decoded?.id_user, access_token);
+                                const resultUser = await getDetailUserRequest(decoded?.userId, access_token);
                                 console.log(resultUser);
                                 dispatch(setUser({ ...resultUser.data, access_token: token }));
                             } catch (e) {
