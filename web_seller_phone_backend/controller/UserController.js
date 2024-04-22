@@ -2,7 +2,6 @@ import { CreateUser } from '../services/User/CreateUserService.js';
 import { LoginUser } from '../services/User/LoginService.js';
 import { ListUsers } from '../services/User/ListUser.js';
 import { GetDetailsUser } from '../services/User/GetDetailsUser.js';
-
 const createUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;

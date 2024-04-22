@@ -1,45 +1,57 @@
+// LoginService.js
+
 import User from '../../model/UserModel.js';
 import bcrypt from 'bcryptjs';
-import { generateAccessToken, generateRefreshToken } from "../JwtService.js";
+import { generateAccessToken, generateRefreshToken } from '../JwtService.js';
 
 const LoginUser = (userLogin) => {
     return new Promise(async (resolve, reject) => {
         const { email, password } = userLogin;
         try {
-            const checkUser = await User.findOne({ email: email });
-            if (checkUser === null) {
-                resolve({ 
+            // Tìm kiếm người dùng dựa trên email
+            const user = await User.findOne({ where: { email } });
+
+            if (!user) {
+                resolve({
                     status: 'ERR',
-                    message: 'The user is not defined'
+                    message: 'User not found',
                 });
-                return;
+                return; 
             }
-            const comparePassword = bcrypt.compareSync(password, checkUser.password);
-            if (!comparePassword) {
-                resolve({ 
+
+            // So sánh mật khẩu
+            const passwordMatch = bcrypt.compareSync(password, user.password);
+            if (!passwordMatch) {
+                resolve({
                     status: 'ERR',
-                    message: 'The password or user is incorrect'
+                    message: 'Incorrect password',
                 });
-                return;
+                return; 
             }
-            const access_token = await generateAccessToken({
-                id_user: checkUser.id_user,
-                isAdmin: checkUser.isAdmin
-            });
-            const refresh_token = await generateRefreshToken({
-                id_user: checkUser.id_user,
-                isAdmin: checkUser.isAdmin
-            });
-            resolve({ // Correct spelling of resolve
+
+            // Tạo AccessToken và RefreshToken với thông tin của người dùng
+            const accessTokenPayload = {
+                userId: user.id_user,
+                isAdmin: user.isAdmin 
+            };
+            const refreshTokenPayload = {
+                userId: user.id_user,
+                isAdmin: user.isAdmin 
+            };
+
+            const accessToken =  await generateAccessToken(accessTokenPayload);
+            const refreshToken =  await generateRefreshToken(refreshTokenPayload);
+
+            resolve({
                 status: 'OK',
                 message: 'SUCCESS',
-                access_token,
-                refresh_token
+                access_token: accessToken,
+                refresh_token: refreshToken,
             });
-        } catch (e) {
-            reject(e);
+        } catch (error) {
+            reject(error); 
         }
     });
 };
 
-export { LoginUser };
+export { LoginUser }; 
