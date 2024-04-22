@@ -5,7 +5,6 @@ const InputForm = (props) => {
     const handleOnchangeInput = (e) => {
         props.onChange(e.target.value);
     };
-    console.log(value);
     return <WrapperInputStyle placeholder={placeholder} value={value} {...rests} onChange={handleOnchangeInput} />;
 };
 

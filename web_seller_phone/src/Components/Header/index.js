@@ -6,10 +6,14 @@ import images from '../../assets/images';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import Button from '../Button';
 import Search from '../Search';
+import { useSelector } from 'react-redux';
+import { UserOutlined } from '@ant-design/icons';
 
 const cx = classNames.bind(styles);
 
 function Header({ isHiddenSearch = false, isHiddenCart = false }) {
+    const user = useSelector((state) => state.user);
+    console.log(user);
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -20,9 +24,18 @@ function Header({ isHiddenSearch = false, isHiddenCart = false }) {
                 {isHiddenSearch ? <div /> : <Search />}
 
                 <div className={cx('action')}>
-                    <Link to={'/sign-in'}>
-                        <Button primary>Đăng nhập</Button>
-                    </Link>
+                    {user.name ? (
+                        <div>
+                            <span style={{ fontSize: '20px', marginRight: '20px' }}>
+                                <UserOutlined />
+                            </span>
+                            {user.name}
+                        </div>
+                    ) : (
+                        <Link to={'/sign-in'}>
+                            <Button primary>Đăng nhập</Button>
+                        </Link>
+                    )}
                 </div>
 
                 {isHiddenCart ? (
