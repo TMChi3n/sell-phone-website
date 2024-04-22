@@ -5,6 +5,7 @@ import { Image } from 'antd';
 import logoLogin from '../../assets/images/Login.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { registerRequest } from '../../apiService/apiService';
 
 function SignUpPage() {
     const navigate = useNavigate();
@@ -13,7 +14,30 @@ function SignUpPage() {
     };
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirm, setconfirm] = useState('');
+    const [username, setUserName] = useState('');
+
+    const handleSignUp = () => {
+        const fetchApi = async () => {
+            try {
+                const result = await registerRequest({
+                    username,
+                    email,
+                    password,
+                });
+                console.log(result);
+                if (result.message === 'SUCCESS') {
+                    alert('Registration successful');
+                    navigate('/sign-in');
+                } else {
+                    alert('Registration failed: ' + result.message);
+                }
+            } catch (e) {
+                alert('Error when registering');
+            }
+        };
+
+        fetchApi();
+    };
 
     return (
         <div
@@ -29,17 +53,18 @@ function SignUpPage() {
                 <WrapperContainerLeft>
                     <h1>Xin chào</h1>
                     <p style={{ marginBottom: '50px' }}>Đăng kí tài khoản </p>
+                    <InputForm
+                        onChange={setUserName}
+                        value={username}
+                        style={{ marginBottom: '10px' }}
+                        placeholder="UserName"
+                    />
                     <InputForm onChange={setEmail} value={email} style={{ marginBottom: '10px' }} placeholder="Email" />
                     <InputForm onChange={setPassword} value={password} placeholder="password" />
-                    <InputForm
-                        onChange={setconfirm}
-                        value={confirm}
-                        style={{ marginTop: '10px' }}
-                        placeholder="confirm password"
-                    />
 
                     <Button
-                        disable={!email || !password || !confirm ? true : false}
+                        onClick={handleSignUp}
+                        disable={!email || !password || !username ? true : false}
                         style={{ margin: '50px 0 10px' }}
                         primary
                     >

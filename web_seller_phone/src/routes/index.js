@@ -23,7 +23,6 @@ const publicRoutes = [
     { path: '/sign-in', component: SignInPage, layout: null },
     { path: '/sign-up', component: SignUpPage, layout: null },
     { path: '/search', component: SearchPage },
-    { path: '/admin', component: AdminPage, layout: AdminLayout },
 ];
-const privateRoutes = [];
+const privateRoutes = [{ path: '/admin', component: AdminPage, layout: AdminLayout }];
 export { privateRoutes, publicRoutes };
