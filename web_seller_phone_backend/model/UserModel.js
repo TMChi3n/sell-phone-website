@@ -1,7 +1,9 @@
 import { DataTypes } from 'sequelize';
 import db from '../db.js';
 
-const User = db.define('User', {
+const User = db.define(
+    'User',
+    {
         id_user: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -17,13 +19,12 @@ const User = db.define('User', {
         },
         isAdmin: {
             type: DataTypes.ENUM('ADMIN', 'USER'),
-            defaultValue: 'USER' 
-          },
+            defaultValue: 'USER',
+        },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-
     },
     {
         timestamps: false,

@@ -66,7 +66,7 @@ function App() {
                             />
                         );
                     })}
-                    {user.isAdmin === 'USER' &&
+                    {user.isAdmin === 'ADMIN' &&
                         privateRoutes.map((route, index) => {
                             const Layout = route.layout || AdminLayout;
                             const Page = route.component;

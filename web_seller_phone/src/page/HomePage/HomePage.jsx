@@ -1,12 +1,12 @@
 import SliderComponent from '../../Components/SliderComponent';
 import CardComponent from '../../Components/CardComponents/CardComponent';
 import { WrapperCartComponent } from './style';
-import TypeProducts from '../../Components/TypeProducts/TypeProducts';
 import ProductFilter from '../../Components/ProductFilter/ProductFilter';
 import { useEffect, useState } from 'react';
 import { getAllProductRequest, filterRequest } from '../../apiService/apiService';
 import { Link } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
+import TypePage from '../../Components/TypePage/TypePage';
 
 function HomePage() {
     const [products, setProducts] = useState([]);
@@ -56,7 +56,7 @@ function HomePage() {
 
     return (
         <div style={{ height: '2000px' }}>
-            <TypeProducts> </TypeProducts>
+            <TypePage> </TypePage>
 
             <SliderComponent />
             <ProductFilter></ProductFilter>
