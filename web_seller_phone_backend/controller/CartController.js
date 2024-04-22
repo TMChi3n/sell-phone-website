@@ -1,3 +1,4 @@
+import Cart from '../model/Cart.js';
 import CartService from '../services/Cart/CartService.js';
 
 const addToCart = async (req, res) => {
@@ -24,10 +25,37 @@ const getCartItems = async (req, res) => {
         }
 
         res.status(200).json(response); // Thành công
-
     } catch (error) {
         res.status(500).json({ message: error.message }); // Xử lý lỗi
     }
 };
 
-export { addToCart, getCartItems };
+const increaseCartQuantity = async (req, res) => {
+    try {
+        const { id_user, id_product } = req.params;
+        const result = await CartService.increaseQuantity(id_user, id_product);
+        if (result.status === 'OK') {
+            res.status(200).json({ message: result.message });
+        } else {
+            res.status(404).json({ message: result.message });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const decreaseCartQuantity = async (req, res) => {
+    try {
+        const { id_user, id_product } = req.params;
+        const result = await CartService.decreaseQuantity(id_user, id_product);
+        if (result.status === 'OK') {
+            res.status(200).json({ message: result.message });
+        } else {
+            res.status(404).json({ message: result.message });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export { addToCart, getCartItems, increaseCartQuantity, decreaseCartQuantity };
