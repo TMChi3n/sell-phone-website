@@ -1,54 +1,33 @@
-import { addItem } from '../services/Cart/AddToCartService.js';
-import { updateItem } from '../services/Cart/UpdateCartItemService.js';
-import { removeItem } from '../services/Cart/RemoveCartItemService.js';
+import CartService from '../services/Cart/CartService.js';
 
 const addToCart = async (req, res) => {
-    const { userId, productId, quantity } = req.body;
-
-    if (!userId || !productId || !quantity) {
-        return res.status(400).json({ message: 'Missing required fields' });
-    }
-
     try {
-        // Gọi hàm addItem từ service để thêm sản phẩm vào giỏ hàng
-        const cartItem = await addItem(userId, productId, quantity);
-
-        return res.status(201).json({ message: 'Item added to cart successfully', cartItem });
+        const { id_user, id_product, quantity } = req.body;
+        if (!id_user || !id_product || !quantity) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+        await CartService.addToCart(id_user, id_product, quantity); // Thêm sản phẩm vào giỏ hàng
+        res.status(200).json({ message: 'Product added to cart' }); // Phản hồi thành công
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message }); // Xử lý lỗi
     }
 };
 
-const removeCartItem = async (req, res) => {
-    const { userId, productId } = req.params; // Lấy userId và productId từ params của yêu cầu DELETE
-
-    if (!userId || !productId) {
-        return res.status(400).json({ message: 'Missing required fields' });
-    }
-
+const getCartItems = async (req, res) => {
     try {
-        await removeItem(userId, productId); // Gọi hàm removeItem từ service để xóa sản phẩm khỏi giỏ hàng
+        const id_user = req.params.id_user;
 
-        return res.status(200).json({ message: 'Cart item removed successfully' });
+        const response = await CartService.getCartItems(id_user);
+
+        if (response.status === 'ERR') {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        res.status(200).json(response); // Thành công
+
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message }); // Xử lý lỗi
     }
 };
 
-const updateCartItem = async (req, res) => {
-    const { userId, productId, quantity } = req.body;
-
-    if (!userId || !productId || !quantity) {
-        return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    try {
-        const cartItem = await updateItem(userId, productId, quantity); // Gọi hàm updateItem từ service để cập nhật số lượng sản phẩm trong giỏ hàng
-
-        return res.status(200).json({ message: 'Cart item updated successfully', cartItem });
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
-
-export { addToCart, removeCartItem, updateCartItem }; 
+export { addToCart, getCartItems };

@@ -1,12 +1,13 @@
 import express from 'express';
-import { addToCart, removeCartItem, updateCartItem } from '../controller/CartController.js';
+import authMiddleware from '../model/authMiddleware.js';
+import { addToCart, getCartItems } from '../controller/CartController.js';
+
 
 const router = express.Router();
 
-router.post('/cart/add', addToCart); // POST /api/cart/add
-
-router.put('/cart/update/:id', updateCartItem); // PUT /api/cart/update/:id
-
-router.delete('/cart/delete/:userId/:productId', removeCartItem); // DELETE /api/cart/delete/:userId/:productId
+router.use(authMiddleware);
+router.post('/cart/add', addToCart);
+router.get('/cart/:id_user', getCartItems);
 
 export default router;
+
