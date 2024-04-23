@@ -1,6 +1,10 @@
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Image } from 'antd';
-import productImg from '../../assets/images/large.jpg.webp';
-import productImgSmall from '../../assets/images/small.jpg.webp';
+import { MinusOutlined, PlusOutlined, StarFilled } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { addCartItemRequest } from '../../apiService/apiService';
 import {
     WrapperStyleImageSmall,
     WrapperStyleColImage,
@@ -12,59 +16,76 @@ import {
     WrapperQualityProduct,
     WrapperInputNumber,
 } from './style';
-import { MinusOutlined, PlusOutlined, StarFilled } from '@ant-design/icons';
-import ButtonComponent from '../ButtonComponent/ButtonComponent';
 
 function ProductDetailComponent({ data }) {
+    const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [numProduct, setNumProduct] = useState(1);
+
     const { id_product, nameProduct, price, stock_quantity, descrip_product, url_picture } = data;
-    const url = url_picture?.data;
-    const imageUrl = url
-        ? String.fromCharCode(...url)
+    const imageUrl = url_picture?.data
+        ? String.fromCharCode(...url_picture.data)
         : 'https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/_/t_m_19.png';
-    const formatted_price = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+    const formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+
+    const onChange = (value) => {
+        setNumProduct(Number(value));
+    };
+
+    const handleOrder = async () => {
+        if (!user || !user.id) {
+            navigate('/sign-in', { state: { from: location.pathname } });
+            return;
+        }
+
+        try {
+            const result = await addCartItemRequest(
+                {
+                    id_user: user.id,
+                    id_product,
+                    quantity: numProduct,
+                    nameProduct,
+                    price,
+                    url_picture: imageUrl,
+                },
+                user.access_token,
+            );
+            console.log(result);
+        } catch (e) {
+            console.error('Error when adding to cart:', e);
+            alert('Error when adding to cart');
+        }
+    };
 
     return (
         <div>
             <Row style={{ padding: '16px', background: '#fff', borderRadius: '4px', height: '100%' }}>
-                <Col style={{ borderRight: '1px solid #e5e5e5', paddingRight: '20px' }} span={10}>
-                    <Image src={imageUrl} preview={false} alt="image-product" />
+                <Col span={10} style={{ borderRight: '1px solid #e5e5e5', paddingRight: '20px' }}>
+                    <Image src={imageUrl} preview={false} alt="Product Image" />
                     <Row style={{ paddingTop: '10px', justifyContent: 'space-between' }}>
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imageUrl} preview={false} alt="productImg" />
-                        </WrapperStyleColImage>
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imageUrl} preview={false} alt="productImg" />
-                        </WrapperStyleColImage>
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imageUrl} preview={false} alt="productImg" />
-                        </WrapperStyleColImage>
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imageUrl} preview={false} alt="productImg" />
-                        </WrapperStyleColImage>
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imageUrl} preview={false} alt="productImg" />
-                        </WrapperStyleColImage>
+                        {[...Array(5)].map((_, index) => (
+                            <WrapperStyleColImage key={index} span={4}>
+                                <WrapperStyleImageSmall src={imageUrl} preview={false} alt="Product Thumbnail" />
+                            </WrapperStyleColImage>
+                        ))}
                     </Row>
                 </Col>
-
-                <Col style={{ padding: '70px 100px' }} span={14}>
+                <Col span={14} style={{ padding: '70px 100px' }}>
                     <WrapperStyleNameProduct>{nameProduct}</WrapperStyleNameProduct>
                     <div>
-                        <StarFilled style={{ color: 'rgb(253,216,54)' }} />
-                        <StarFilled style={{ color: 'rgb(253,216,54)' }} />
-                        <StarFilled style={{ color: 'rgb(253,216,54)' }} />
-                        <StarFilled style={{ color: 'rgb(253,216,54)' }} />
-                        <WrapperStyleTextSell> | Đã bán {stock_quantity} +</WrapperStyleTextSell>
+                        {[...Array(4)].map((_, index) => (
+                            <StarFilled key={index} style={{ color: 'rgb(253,216,54)' }} />
+                        ))}
+                        <WrapperStyleTextSell> | Đã bán {stock_quantity}+</WrapperStyleTextSell>
                     </div>
                     <WrapperPriceProduct>
-                        <WrapperPriceTextProduct>{formatted_price}</WrapperPriceTextProduct>
+                        <WrapperPriceTextProduct>{formattedPrice}</WrapperPriceTextProduct>
                     </WrapperPriceProduct>
                     <WrapperDesciptionProduct>
-                        <span className="header-desciption">Mô tả sản phẩm: </span>
-                        <br />
-                        <p className="body-desciption">{descrip_product}</p>
+                        <span className="header-description">Mô tả sản phẩm: </span>
+                        <p className="body-description">{descrip_product}</p>
                     </WrapperDesciptionProduct>
-
                     <div
                         style={{
                             margin: '10px 0 20px',
@@ -73,48 +94,37 @@ function ProductDetailComponent({ data }) {
                             borderBottom: '1px solid #e5e5e5',
                         }}
                     >
-                        <div style={{ marginBottom: '10px' }}>Số lượng</div>
-
+                        <div>Số lượng</div>
                         <WrapperQualityProduct>
                             <button
-                                style={{
-                                    border: 'none',
-                                    background: 'transparent',
-                                    cursor: 'pointer',
-                                    fontSize: '10px',
-                                }}
+                                onClick={() => setNumProduct(numProduct - 1)}
+                                disabled={numProduct <= 1}
+                                style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
                             >
                                 <MinusOutlined style={{ color: '#000', fontSize: '15px' }} />
                             </button>
-                            <WrapperInputNumber defaultValue={1} min={1} size="small" />
+                            <WrapperInputNumber value={numProduct} onChange={onChange} min={1} size="small" />
                             <button
-                                style={{
-                                    border: 'none',
-                                    background: 'transparent',
-                                    cursor: 'pointer',
-                                    fontSize: '10px',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                }}
+                                onClick={() => setNumProduct(numProduct + 1)}
+                                style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
                             >
                                 <PlusOutlined style={{ color: '#000', fontSize: '15px' }} />
                             </button>
                         </WrapperQualityProduct>
                     </div>
-                    <div>
-                        <ButtonComponent
-                            size={40}
-                            styleButton={{
-                                background: 'rgb(255, 57, 69)',
-                                height: '48px',
-                                width: '220px',
-                                border: 'none',
-                                borderRadius: '4px',
-                            }}
-                            textButton={'Chọn mua'}
-                            styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
-                        ></ButtonComponent>
-                    </div>
+                    <ButtonComponent
+                        onClick={handleOrder}
+                        size={40}
+                        styleButton={{
+                            background: 'rgb(255, 57, 69)',
+                            height: '48px',
+                            width: '220px',
+                            border: 'none',
+                            borderRadius: '4px',
+                        }}
+                        textButton="Chọn mua"
+                        styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
+                    />
                 </Col>
             </Row>
         </div>
