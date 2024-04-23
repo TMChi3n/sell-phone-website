@@ -70,6 +70,17 @@ class CartService {
             return { status: 'ERR', message: error.message };
         }
     }
+
+    static async removeProductWithoutCart(id_cart_item) {
+        const item = await CartItem.findByPk(id_cart_item);
+        if (!item) {
+            return { status: 'ERR', message: 'Product not found' };
+        }
+
+        // If the item exists, you can delete it
+        await item.destroy();
+        return { status: 'OK', message: 'Product removed successfully' };
+    }
 }
 
 export default CartService;
