@@ -30,8 +30,13 @@ function SignInPage() {
                 if (decoded) {
                     const fetchApi = async () => {
                         try {
-                            const resultUser = await getDetailUserRequest(decoded?.userId, result?.access_token);
+                            const resultUser = await getDetailUserRequest(
+                                decoded?.payload.userId,
+                                result?.access_token,
+                            );
                             console.log(resultUser);
+                            localStorage.setItem('user', JSON.stringify(resultUser));
+
                             dispatch(setUser({ ...resultUser.data, access_token: token }));
                         } catch (e) {
                             alert('Error when login');

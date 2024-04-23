@@ -13,7 +13,7 @@ const cx = classNames.bind(styles);
 
 function Header({ isHiddenSearch = false, isHiddenCart = false }) {
     const user = useSelector((state) => state.user);
-    console.log(user.access_token);
+    console.log(user);
 
     const content = (
         <div>

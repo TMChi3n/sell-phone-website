@@ -1,7 +1,6 @@
 import React from 'react';
 // import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Image } from 'antd';
-import productImgSmall from '../../assets/images/small.jpg.webp';
 import {
     WrapperCartInner,
     WrapperCartInnerLeft,
@@ -18,22 +17,29 @@ import { useSelector } from 'react-redux';
 
 const CartItem = ({ product, onRemove, onIncrease, onDecrease }) => {
     // Calculate total price for the product
-    const totalPrice = product.price * product.quantity;
+
     const order = useSelector((state) => state.order);
     console.log(order);
+    const { id_product, nameProduct, price, url_picture, quantity } = product;
+    const url = url_picture?.data;
+    const imageUrl = url
+        ? String.fromCharCode(...url)
+        : 'https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/_/t_m_19.png';
+    const formatted_price = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+    console.log(imageUrl);
 
     return (
         <WrapperCartContainer>
             <WrapperCartInner>
                 <WrapperCartInnerLeft>
-                    <Image preview={false} style={{ width: '70px', height: '70px' }} src={productImgSmall} />
-                    <WrapperCartName>Iphone </WrapperCartName>
+                    <Image preview={false} style={{ width: '70px', height: '70px' }} src={imageUrl} />
+                    <WrapperCartName>{nameProduct} </WrapperCartName>
                 </WrapperCartInnerLeft>
                 <WrapperCartInnerRight>
-                    <WrapperCartPrice>200.000 VNĐ</WrapperCartPrice>
+                    <WrapperCartPrice>{formatted_price}</WrapperCartPrice>
                     <WrapperQualityProduct>
                         <button
-                            onClick={() => onDecrease(product.id)}
+                            onClick={() => onDecrease(id_product)}
                             style={{
                                 border: 'none',
                                 background: 'transparent',
@@ -43,9 +49,9 @@ const CartItem = ({ product, onRemove, onIncrease, onDecrease }) => {
                         >
                             <MinusOutlined style={{ color: '#000', fontSize: '15px' }} />
                         </button>
-                        <WrapperInputNumber value={product.quantity} defaultValue={1} min={1} size="small" />
+                        <WrapperInputNumber value={quantity} defaultValue={1} min={1} size="small" />
                         <button
-                            onClick={() => onIncrease(product.id)}
+                            onClick={() => onIncrease(id_product)}
                             style={{
                                 border: 'none',
                                 background: 'transparent',
