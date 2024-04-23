@@ -18,6 +18,10 @@ const Order = db.define(
         key: 'id_user',
       },
     },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     address: {
       type: DataTypes.STRING,
       allowNull: false,
