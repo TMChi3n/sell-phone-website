@@ -3,11 +3,11 @@ import CartService from '../services/Cart/CartService.js';
 
 const addToCart = async (req, res) => {
     try {
-        const { id_user, id_product, quantity } = req.body;
-        if (!id_user || !id_product || !quantity) {
+        const { id_user, id_product, quantity,nameProduct , price, url_picture } = req.body;
+        if (!id_user || !id_product || !quantity || !nameProduct || !price || !url_picture) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
-        await CartService.addToCart(id_user, id_product, quantity); // Thêm sản phẩm vào giỏ hàng
+        await CartService.addToCart(id_user, id_product, quantity,nameProduct , price, url_picture ); // Thêm sản phẩm vào giỏ hàng
         res.status(200).json({ message: 'Product added to cart' }); // Phản hồi thành công
     } catch (error) {
         res.status(500).json({ message: error.message }); // Xử lý lỗi
