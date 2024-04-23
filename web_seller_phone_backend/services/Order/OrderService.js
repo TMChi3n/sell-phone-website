@@ -3,7 +3,7 @@ import CartItem from '../../model/CartItem.js';
 import Order from '../../model/order.js';
 import OrderItem from '../../model/OrderItem.js';
 import Product from '../../model/ProductModel.js';
-const createOrderFromCartService = async (id_user, address, phone_number) => {
+const createOrderFromCartService = async (id_user, address, phone_number,username) => {
     const cart = await Cart.findOne({
         where: { id_user },
         include: [
@@ -27,6 +27,7 @@ const createOrderFromCartService = async (id_user, address, phone_number) => {
         id_user,
         address,
         phone_number,
+        username,
         total_amount: totalAmount,
     });
 

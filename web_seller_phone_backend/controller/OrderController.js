@@ -1,13 +1,14 @@
 import orderService from '../services/Order/OrderService.js';
 
 const createOrderFromCartController = async (req, res) => {
-    const { id_user, address, phone_number } = req.body;
+    const { id_user, address, phone_number, username } = req.body;
 
     try {
         const order = await orderService.createOrderFromCartService(
             id_user,
             address,
             phone_number,
+            username,
         );
     
         return res.status(201).json({
