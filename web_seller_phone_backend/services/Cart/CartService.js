@@ -2,7 +2,7 @@ import Cart from '../../model/Cart.js';
 import CartItem from '../../model/CartItem.js';
 
 class CartService {
-    static async addToCart(id_user, id_product, quantity) {
+    static async addToCart(id_user, id_product, quantity,nameProduct , price, url_picture ) {
         let cart = await Cart.findOne({ where: { id_user } });
         if (!cart) {
             cart = await Cart.create({ id_user });
@@ -13,7 +13,7 @@ class CartService {
         if (existingCartItem) {
             await existingCartItem.update({ quantity: existingCartItem.quantity + quantity });
         } else {
-            await CartItem.create({ id_cart: cart.id_cart, id_product, quantity });
+            await CartItem.create({ id_cart: cart.id_cart, id_product, quantity,nameProduct , price, url_picture  });
         }
     }
 

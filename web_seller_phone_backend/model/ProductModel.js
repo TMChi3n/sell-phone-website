@@ -38,6 +38,7 @@ const Product = db.define(
         timestamps: false,
         tableName: 'products',
     },
+    
 );
 
 export default Product;
