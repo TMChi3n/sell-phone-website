@@ -1,5 +1,3 @@
-// LoginService.js
-
 import User from '../../model/UserModel.js';
 import bcrypt from 'bcryptjs';
 import { generateAccessToken, generateRefreshToken } from '../JwtService.js';

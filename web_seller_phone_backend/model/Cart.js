@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import db from '../db.js';
-
+import User from './UserModel.js';
 const Cart = db.define('Cart', {
     id_cart: {
         type: DataTypes.INTEGER,
@@ -10,6 +10,10 @@ const Cart = db.define('Cart', {
     id_user: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: User,
+            key: 'id_user',
+          },
     },
     
 },
@@ -18,6 +22,5 @@ const Cart = db.define('Cart', {
     tableName: 'carts',
 },
 );
-
 
 export default Cart;
