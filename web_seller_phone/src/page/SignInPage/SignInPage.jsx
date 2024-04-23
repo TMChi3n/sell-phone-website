@@ -3,7 +3,7 @@ import Button from '../../Components/Button';
 import InputForm from '../../Components/InputForm/InputForm';
 import { WrapperContainerLeft, WrapperContainerRight, WrappperTextLight } from './style';
 import logoLogin from '../../assets/images/loginImg.jpg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { loginRequest, getDetailUserRequest } from '../../apiService/apiService';
 import { jwtDecode } from 'jwt-decode';
@@ -12,6 +12,8 @@ import { setUser } from '../../redux/slides/userSlice';
 
 function SignInPage() {
     const navigate = useNavigate();
+    const location = useLocation();
+
     const handleNavigated = () => {
         navigate('/sign-up');
     };
@@ -55,7 +57,11 @@ function SignInPage() {
                 console.log(result);
                 if (result.message === 'SUCCESS') {
                     alert('Login successful');
-                    navigate('/');
+                    if (location?.state) {
+                        navigate(location?.state);
+                    } else {
+                        navigate('/');
+                    }
                     localStorage.setItem('access_token', JSON.stringify(result?.access_token));
                     handleToken(result);
                 } else {

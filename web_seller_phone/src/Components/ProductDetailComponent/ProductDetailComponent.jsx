@@ -14,14 +14,49 @@ import {
 } from './style';
 import { MinusOutlined, PlusOutlined, StarFilled } from '@ant-design/icons';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addOrderProduct } from '../../redux/slides/orderSlide';
+import { useState } from 'react';
 
 function ProductDetailComponent({ data }) {
+    const user = useSelector((state) => state.user);
+    console.log(user);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const dispatch = useDispatch();
+
+    const [numProduct, setNumProduct] = useState(1);
+    const onChange = (value) => {
+        setNumProduct(Number(value));
+    };
+    console.log(numProduct);
+
     const { id_product, nameProduct, price, stock_quantity, descrip_product, url_picture } = data;
     const url = url_picture?.data;
     const imageUrl = url
         ? String.fromCharCode(...url)
         : 'https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/_/t_m_19.png';
     const formatted_price = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+
+    const handleOrder = () => {
+        if (user?.id) {
+            dispatch(
+                addOrderProduct({
+                    orderItem: {
+                        name: nameProduct,
+                        amount: numProduct,
+                        image: imageUrl,
+                        price,
+                        product: id_product,
+                    },
+                }),
+            );
+        } else {
+            navigate('/sign-in', { state: location?.pathname });
+        }
+    };
 
     return (
         <div>
@@ -86,7 +121,13 @@ function ProductDetailComponent({ data }) {
                             >
                                 <MinusOutlined style={{ color: '#000', fontSize: '15px' }} />
                             </button>
-                            <WrapperInputNumber defaultValue={1} min={1} size="small" />
+                            <WrapperInputNumber
+                                value={numProduct}
+                                onChange={onChange}
+                                defaultValue={1}
+                                min={1}
+                                size="small"
+                            />
                             <button
                                 style={{
                                     border: 'none',
@@ -103,6 +144,7 @@ function ProductDetailComponent({ data }) {
                     </div>
                     <div>
                         <ButtonComponent
+                            onClick={handleOrder}
                             size={40}
                             styleButton={{
                                 background: 'rgb(255, 57, 69)',
