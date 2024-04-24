@@ -11,7 +11,7 @@ const deleteProduct = async (id) => {
             };
         }
 
-        await Product.destroy(data, {
+        await Product.destroy({
             where: {
                 id_product: id,
             },
@@ -19,11 +19,11 @@ const deleteProduct = async (id) => {
 
         return {
             status: 'success',
-            message: 'Product updated successfully',
+            message: 'Product deleted successfully',
         };
     } catch (error) {
-      throw new Error('Error deleting product: ' + error.message);
+        throw error;
     }
-  };
-  
+};
+
 export { deleteProduct };
