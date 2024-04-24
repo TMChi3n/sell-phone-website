@@ -76,6 +76,7 @@ export const getDetailUserRequest = async (id, access_token) => {
     }
 };
 export const getCartItemRequest = async (id, access_token) => {
+    console.log(access_token, id);
     try {
         const res = await request.get(`api/cart/${id}`, {
             headers: {

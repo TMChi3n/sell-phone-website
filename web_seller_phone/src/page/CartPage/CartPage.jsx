@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import CartItem from '../../Components/CartComponent/CartItem';
 import InputForm from '../../Components/InputForm/InputForm';
@@ -15,19 +15,20 @@ import { success } from '../../Components/Message/Message';
 
 const CartPage = () => {
     const user = useSelector((state) => state.user);
+    console.log(user);
     const [cartItems, setCartItems] = useState([]);
     const [isShowCheckout, setIsShowCheckout] = useState(false);
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
 
-    const fetchCartItems = async () => {
+    const fetchCartItems = useCallback(async () => {
         try {
             const cart = await getCartItemRequest(user.id, user.access_token);
             setCartItems(cart.data);
         } catch (error) {
             console.error('Failed to fetch cart items:', error);
         }
-    };
+    }, [user.id, user.access_token]);
 
     // Fetch cart items when the user changes or initially loads the page
     useEffect(() => {

@@ -1,7 +1,7 @@
 // ProductService.js
 import Product from '../../model/ProductModel.js';
 
-const deleteProduct = async (id, data) => {
+const deleteProduct = async (id) => {
     try {
         const checkProduct = await Product.findByPk(id);
         if (!checkProduct) {
@@ -11,7 +11,7 @@ const deleteProduct = async (id, data) => {
             };
         }
 
-        await Product.destroy(data, {
+        await Product.destroy({
             where: {
                 id_product: id,
             },
@@ -19,7 +19,7 @@ const deleteProduct = async (id, data) => {
 
         return {
             status: 'success',
-            message: 'Product updated successfully',
+            message: 'Product deleted successfully',
         };
     } catch (error) {
         throw error;
