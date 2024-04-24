@@ -145,3 +145,16 @@ export const deleteItemRequest = async (id_cart_item, access_token) => {
         console.log(error);
     }
 };
+export const orderItemRequest = async (data, access_token) => {
+    console.log(access_token);
+    try {
+        const res = await request.post(`api/create-order-from-cart`, data, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};

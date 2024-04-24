@@ -9,12 +9,17 @@ import {
     increaseItemRequest,
     decreaseItemRequest,
     deleteItemRequest,
+    orderItemRequest,
 } from '../../apiService/apiService';
+import { success } from '../../Components/Message/Message';
 
 const CartPage = () => {
     const user = useSelector((state) => state.user);
     const [cartItems, setCartItems] = useState([]);
     const [isShowCheckout, setIsShowCheckout] = useState(false);
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
+
     const fetchCartItems = async () => {
         try {
             const cart = await getCartItemRequest(user.id, user.access_token);
@@ -95,7 +100,29 @@ const CartPage = () => {
     const handleCheckout = () => {
         setIsShowCheckout(true);
     };
-    console.log(cartItems);
+    console.log(user);
+
+    const handleOrder = async () => {
+        const data = {
+            id_user: user.id,
+            username: user.name,
+            address,
+            phone_number: phone,
+        };
+        if (!user || !user.id || !user.access_token) {
+            console.error('User authentication details are missing');
+            return;
+        }
+
+        try {
+            const response = await orderItemRequest(data, user.access_token);
+            fetchCartItems();
+            setIsShowCheckout(false);
+            success('Đặt hàng thành công');
+        } catch (error) {
+            error(error);
+        }
+    };
 
     return (
         <div style={{ backgroundColor: '#f5f5fa', display: 'flex', flexDirection: 'column', minHeight: '2000px' }}>
@@ -154,6 +181,7 @@ const CartPage = () => {
                     <div
                         style={{
                             background: '#fff',
+                            width: '500px',
                             padding: 20,
                             borderRadius: 5,
                             textAlign: 'center',
@@ -171,11 +199,21 @@ const CartPage = () => {
                             }}
                         />
                         <h3>Thông tin đặt hàng</h3>
-                        <InputForm style={{ marginBottom: '10px' }} placeholder="Họ và tên" />
-                        <InputForm style={{ marginBottom: '10px' }} placeholder="Số điện thoại" />
-                        <InputForm style={{ marginBottom: '10px' }} placeholder="Email" />
-                        <InputForm style={{ marginBottom: '10px' }} placeholder="Địa chỉ" />
-                        <Button rounded>Xác nhận và đặt hàng</Button>
+                        <InputForm
+                            onChange={setPhone}
+                            value={phone}
+                            style={{ padding: '10px', marginBottom: '20px' }}
+                            placeholder="Số điện thoại"
+                        />
+                        <InputForm
+                            onChange={setAddress}
+                            value={address}
+                            style={{ padding: '10px', marginBottom: '40px' }}
+                            placeholder="Địa chỉ"
+                        />
+                        <Button onClick={handleOrder} disable={!phone || !address ? true : false} rounded>
+                            Xác nhận và đặt hàng
+                        </Button>
                     </div>
                 </div>
             )}

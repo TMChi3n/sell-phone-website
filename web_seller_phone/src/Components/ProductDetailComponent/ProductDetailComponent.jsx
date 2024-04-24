@@ -16,6 +16,7 @@ import {
     WrapperQualityProduct,
     WrapperInputNumber,
 } from './style';
+import { success } from '../Message/Message';
 
 function ProductDetailComponent({ data }) {
     const user = useSelector((state) => state.user);
@@ -51,7 +52,7 @@ function ProductDetailComponent({ data }) {
                 },
                 user.access_token,
             );
-            console.log(result);
+            success('Sản phẩm đã được thêm vào giỏ hàng ');
         } catch (e) {
             console.error('Error when adding to cart:', e);
             alert('Error when adding to cart');
@@ -83,8 +84,12 @@ function ProductDetailComponent({ data }) {
                         <WrapperPriceTextProduct>{formattedPrice}</WrapperPriceTextProduct>
                     </WrapperPriceProduct>
                     <WrapperDesciptionProduct>
-                        <span className="header-description">Mô tả sản phẩm: </span>
-                        <p className="body-description">{descrip_product}</p>
+                        <span className="header-description">
+                            <h4>Mô tả sản phẩm:</h4>
+                        </span>
+                        <p style={{ marginTop: '15px' }} className="body-description">
+                            {descrip_product}
+                        </p>
                     </WrapperDesciptionProduct>
                     <div
                         style={{
