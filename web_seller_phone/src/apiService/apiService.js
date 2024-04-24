@@ -75,3 +75,4 @@ export const getDetailUserRequest = async (id, access_token) => {
         console.log(error);
     }
 };
+

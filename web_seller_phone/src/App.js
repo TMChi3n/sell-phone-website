@@ -10,7 +10,8 @@ import { setUser } from './redux/slides/userSlice';
 import { useSelector } from 'react-redux';
 import AdminLayout from './Components/Layouts/AdminLayout';
 import { getDetailUserRequest } from './apiService/apiService';
-
+import { QueryClient, QueryClientProvider } from 'react-query'; 
+const queryClient = new QueryClient();
 function App() {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
@@ -24,7 +25,7 @@ function App() {
                     if (decoded) {
                         const fetchApi = async () => {
                             try {
-                                const resultUser = await getDetailUserRequest(decoded?.userId, access_token);
+                                const resultUser = await getDetailUserRequest(decoded?.payload.userId, access_token);
                                 console.log(resultUser);
                                 dispatch(setUser({ ...resultUser.data, access_token: token }));
                             } catch (e) {
@@ -47,28 +48,16 @@ function App() {
             handleToken(storageData);
         }
     }, []);
+    
+    
+
     return (
-        <Router>
-            <div className="App">
-                <Routes>
-                    {publicRoutes.map((route, index) => {
-                        const Layout = route.layout === null ? Fragment : route.layout || DefaultLayout;
-                        const Page = route.component;
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
-                    })}
-                    {user.isAdmin === 'ADMIN' &&
-                        privateRoutes.map((route, index) => {
-                            const Layout = route.layout || AdminLayout;
+        <QueryClientProvider client={queryClient}>
+            <Router>
+                <div className="App">
+                    <Routes>
+                        {publicRoutes.map((route, index) => {
+                            const Layout = route.layout === null ? Fragment : route.layout || DefaultLayout;
                             const Page = route.component;
                             return (
                                 <Route
@@ -82,9 +71,26 @@ function App() {
                                 />
                             );
                         })}
-                </Routes>
-            </div>
-        </Router>
+                        {user.isAdmin === 'ADMIN' &&
+                            privateRoutes.map((route, index) => {
+                                const Layout = route.layout || AdminLayout;
+                                const Page = route.component;
+                                return (
+                                    <Route
+                                        key={index}
+                                        path={route.path}
+                                        element={
+                                            <Layout>
+                                                <Page />
+                                            </Layout>
+                                        }
+                                    />
+                                );
+                            })}
+                    </Routes>
+                </div>
+            </Router>
+        </QueryClientProvider>
     );
 }
 

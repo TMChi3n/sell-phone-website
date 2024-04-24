@@ -51,12 +51,12 @@ const getProductById = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-    const { nameProduct, price, stock_quantity, descrip_product, url_picture } = req.body;
-        if (!nameProduct || !price || !stock_quantity || !descrip_product || !url_picture) {
+    const { nameProduct, price, stock_quantity, descrip_product, url_picture,brand } = req.body;
+        if (!nameProduct || !price || !stock_quantity || !descrip_product || !url_picture|| !brand) {
             return res.status(400).json({ error: 'Invalid data' });
         }
         try {
-            const productData = { nameProduct, price, stock_quantity, descrip_product, url_picture };
+            const productData = { nameProduct, price, stock_quantity, descrip_product, url_picture, brand };
             const newProduct = await create(productData);
             res.status(201).json(newProduct);
         } catch (error) {
@@ -68,10 +68,10 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     const productId = req.params.id;
     const data = req.body;
-    if (!productId) {
+    if (!productId || isNaN(parseInt(productId))) {
         return res.status(400).json({
             status: 'ERR',
-            message: 'The productId is required',
+            message: 'Invalid product ID',
         });
     }
     try {

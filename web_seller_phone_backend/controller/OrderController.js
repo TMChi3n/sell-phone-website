@@ -21,6 +21,16 @@ const createOrderFromCartController = async (req, res) => {
     }
 };
 
+const getAllOrder = async (req, res) => {
+    const result = await orderService.getAllOrders();
+
+    if (result.status === 'OK') {
+        res.json(result.data);
+    } else {
+        res.status(500).json({ message: result.message });
+    }
+};
+
 export default {
-    createOrderFromCartController,
+    createOrderFromCartController,getAllOrder
 };

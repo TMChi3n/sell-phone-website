@@ -48,7 +48,25 @@ const createOrderFromCartService = async (id_user, address, phone_number,usernam
     return order; // Trả về đơn hàng vừa tạo
 };
 
+const getAllOrders = async () => {
+    try {
+        // Lấy tất cả các đơn đặt hàng từ mô hình
+        const orders = await Order.findAll();
+        return {
+            status: 'OK',
+            message: 'Successfully fetched all orders',
+            data: orders,
+        };
+    } catch (error) {
+        return {
+            status: 'ERR',
+            message: 'Error fetching orders',
+            error: error.message,
+        };
+    }
+};
+
 
 export default {
-    createOrderFromCartService,
+    createOrderFromCartService,getAllOrders
 };

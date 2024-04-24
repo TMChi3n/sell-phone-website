@@ -19,7 +19,7 @@ const User = db.define(
         },
         isAdmin: {
             type: DataTypes.ENUM('ADMIN', 'USER'),
-            defaultValue: 'USER',
+            defaultValue: 'ADMIN',
         },
         password: {
             type: DataTypes.STRING,
