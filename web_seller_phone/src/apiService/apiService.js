@@ -75,4 +75,86 @@ export const getDetailUserRequest = async (id, access_token) => {
         console.log(error);
     }
 };
+export const getCartItemRequest = async (id, access_token) => {
+    try {
+        const res = await request.get(`api/cart/${id}`, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const addCartItemRequest = async (data, access_token) => {
+    try {
+        const res = await request.post(`api/cart/add`, data, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const decreaseItemRequest = async (id_user, id_product, access_token) => {
+    try {
+        const res = await request.put(
+            `api/cart/decrease/${id_user}/${id_product}`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        );
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
 
+export const increaseItemRequest = async (id_user, id_product, access_token) => {
+    try {
+        const res = await request.put(
+            `api/cart/increase/${id_user}/${id_product}`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        );
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const deleteItemRequest = async (id_cart_item, access_token) => {
+    console.log(access_token);
+    try {
+        const res = await request.delete(`api/cart/remove/${id_cart_item}`, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const orderItemRequest = async (data, access_token) => {
+    console.log(access_token);
+    try {
+        const res = await request.post(`api/create-order-from-cart`, data, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
