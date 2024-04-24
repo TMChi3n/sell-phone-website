@@ -94,7 +94,7 @@ function SignInPage() {
                     <h1>Xin chào</h1>
                     <p style={{ marginBottom: '50px' }}>Đăng nhập vào tài khoản bằng email</p>
                     <InputForm onChange={setEmail} value={email} style={{ marginBottom: '10px' }} placeholder="Email" />
-                    <InputForm onChange={setPassword} value={password} placeholder="password" />
+                    <InputForm onChange={setPassword} type="password" value={password} placeholder="password" />
                     <Button
                         onClick={handleSignIn}
                         disable={!email || !password ? true : false}
@@ -109,7 +109,7 @@ function SignInPage() {
                     </p>
                 </WrapperContainerLeft>
                 <WrapperContainerRight style={{ borderRadius: '6px' }}>
-                    <Image src={logoLogin} preview={false} alt="iamge-logo" height="100%" width="100%" />
+                    <Image src={logoLogin} preview={false} alt="iamge-logo" height="100%" width="130%" />
                 </WrapperContainerRight>
             </div>
         </div>
