@@ -4,25 +4,29 @@ import CartItem from '../../Components/CartComponent/CartItem';
 import InputForm from '../../Components/InputForm/InputForm';
 import { CloseOutlined } from '@ant-design/icons';
 import Button from '../../Components/Button';
-import { getCartItemRequest, increaseItemRequest, decreaseItemRequest } from '../../apiService/apiService';
+import {
+    getCartItemRequest,
+    increaseItemRequest,
+    decreaseItemRequest,
+    deleteItemRequest,
+} from '../../apiService/apiService';
 
 const CartPage = () => {
     const user = useSelector((state) => state.user);
     const [cartItems, setCartItems] = useState([]);
     const [isShowCheckout, setIsShowCheckout] = useState(false);
+    const fetchCartItems = async () => {
+        try {
+            const cart = await getCartItemRequest(user.id, user.access_token);
+            setCartItems(cart.data);
+        } catch (error) {
+            console.error('Failed to fetch cart items:', error);
+        }
+    };
 
     // Fetch cart items when the user changes or initially loads the page
     useEffect(() => {
         if (user && user.id && user.access_token) {
-            const fetchCartItems = async () => {
-                try {
-                    const cart = await getCartItemRequest(user.id, user.access_token);
-                    setCartItems(cart.data);
-                } catch (error) {
-                    console.error('Failed to fetch cart items:', error);
-                }
-            };
-
             fetchCartItems();
         }
     }, [user]);
@@ -37,21 +41,14 @@ const CartPage = () => {
     const handleIncrease = async (productId) => {
         if (!user || !user.id || !user.access_token) {
             console.error('User authentication details are missing');
-            alert('Please log in to adjust the cart items.');
             return;
         }
-
-        console.log('Access Token:', user.access_token);
-        console.log('Product ID:', productId);
-        console.log('User ID:', user.id);
-
         try {
             const response = await increaseItemRequest(user.id, productId, user.access_token);
-            if (response.success) {
-                updateCartItemQuantity(productId, 1);
+            if (response.message) {
+                fetchCartItems();
             } else {
                 console.error('Failed to increase quantity:', response.message);
-                alert('Failed to increase quantity.');
             }
         } catch (error) {
             console.error('Error increasing quantity:', error);
@@ -59,61 +56,86 @@ const CartPage = () => {
     };
 
     const handleDecrease = async (productId) => {
-        const product = cartItems.find((item) => item.id === productId);
-        if (product && product.quantity > 1) {
-            try {
-                await decreaseItemRequest(user.id, productId, user.access_token);
-            } catch (error) {
-                console.error('Error decreasing quantity:', error);
+        if (!user || !user.id || !user.access_token) {
+            console.error('User authentication details are missing');
+            return;
+        }
+
+        try {
+            const response = await decreaseItemRequest(user.id, productId, user.access_token);
+            if (response.message) {
+                fetchCartItems();
+            } else {
+                console.error('Failed to increase quantity:', response.message);
             }
+        } catch (error) {
+            console.error('Error increasing quantity:', error);
         }
     };
 
-    const updateCartItemQuantity = (productId, change) => {
-        setCartItems((currentItems) =>
-            currentItems.map((item) => (item.id === productId ? { ...item, quantity: item.quantity + change } : item)),
-        );
+    const handleRemove = async (id_cart_item) => {
+        if (!user || !user.id || !user.access_token) {
+            console.error('User authentication details are missing');
+            return;
+        }
+
+        try {
+            const response = await deleteItemRequest(id_cart_item, user.access_token);
+            if (response.message) {
+                fetchCartItems();
+            } else {
+                console.error('Failed to increase quantity:', response.message);
+            }
+        } catch (error) {
+            console.error('Error increasing quantity:', error);
+        }
     };
 
     // Handler for checkout process
     const handleCheckout = () => {
         setIsShowCheckout(true);
     };
+    console.log(cartItems);
 
     return (
         <div style={{ backgroundColor: '#f5f5fa', display: 'flex', flexDirection: 'column', minHeight: '2000px' }}>
             <div style={{ margin: '40px', fontWeight: 'bold', fontSize: '15px' }}>Giỏ hàng</div>
             {cartItems.length === 0 ? (
-                <p>Giỏ hàng của bạn trống</p>
+                <p style={{ textAlign: 'center' }}>Giỏ hàng của bạn trống</p>
             ) : (
-                cartItems.map((item, index) => (
-                    <CartItem
-                        key={index}
-                        product={item}
-                        onIncrease={() => handleIncrease(item.id_product)}
-                        onDecrease={() => handleDecrease(item.id_product)}
-                    />
-                ))
+                <div>
+                    {cartItems.map((item, index) => (
+                        <CartItem
+                            key={index}
+                            product={item}
+                            onIncrease={() => handleIncrease(item.id_product)}
+                            onDecrease={() => handleDecrease(item.id_product)}
+                            onRemove={() => handleRemove(item.id_cart_item)}
+                        />
+                    ))}
+                    <div style={{ marginTop: '100px', textAlign: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            Tổng tiền: <h4 style={{ marginLeft: '5px' }}> {calculateTotalPrice()}</h4>
+                        </div>
+                        <div>Phí vận chuyển: Miễn phí</div>
+                        <button
+                            onClick={handleCheckout}
+                            style={{
+                                backgroundColor: '#007bff',
+                                color: '#fff',
+                                border: 'none',
+                                padding: '10px',
+                                borderRadius: '5px',
+                                marginTop: '10px',
+                                cursor: 'pointer',
+                                fontSize: '15px',
+                            }}
+                        >
+                            Thanh toán
+                        </button>
+                    </div>
+                </div>
             )}
-            <div style={{ marginTop: '10px', textAlign: 'center' }}>
-                <div>Tổng tiền: {calculateTotalPrice()}</div>
-                <div>Phí vận chuyển: Miễn phí</div>
-                <button
-                    onClick={handleCheckout}
-                    style={{
-                        backgroundColor: '#007bff',
-                        color: '#fff',
-                        border: 'none',
-                        padding: '10px',
-                        borderRadius: '5px',
-                        marginTop: '10px',
-                        cursor: 'pointer',
-                        fontSize: '15px',
-                    }}
-                >
-                    Thanh toán
-                </button>
-            </div>
 
             {isShowCheckout && (
                 <div
