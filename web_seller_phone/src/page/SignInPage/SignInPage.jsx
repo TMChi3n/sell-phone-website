@@ -9,6 +9,8 @@ import { loginRequest, getDetailUserRequest } from '../../apiService/apiService'
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/slides/userSlice';
+import { success, error } from '../../Components/Message/Message';
+import Loading from '../../Components/Loading/Loading';
 
 function SignInPage() {
     const navigate = useNavigate();
@@ -35,6 +37,8 @@ function SignInPage() {
                                 result?.access_token,
                             );
                             console.log(resultUser);
+                            success('Đăng nhập thành công');
+
                             localStorage.setItem('user', JSON.stringify(resultUser));
 
                             dispatch(setUser({ ...resultUser.data, access_token: token }));
@@ -59,9 +63,10 @@ function SignInPage() {
                     email,
                     password,
                 });
+
                 console.log(result);
                 if (result.message === 'SUCCESS') {
-                    alert('Login successful');
+                    alert('Đăng nhập thành công');
                     if (location?.state) {
                         navigate(location?.state);
                     } else {
@@ -70,10 +75,10 @@ function SignInPage() {
                     localStorage.setItem('access_token', JSON.stringify(result?.access_token));
                     handleToken(result);
                 } else {
-                    alert('Login failed: ' + result.message);
+                    error(result.message);
                 }
             } catch (e) {
-                alert('Error when login');
+                error('Đã xảy ra lỗi ');
             }
         };
 
@@ -95,6 +100,7 @@ function SignInPage() {
                     <p style={{ marginBottom: '50px' }}>Đăng nhập vào tài khoản bằng email</p>
                     <InputForm onChange={setEmail} value={email} style={{ marginBottom: '10px' }} placeholder="Email" />
                     <InputForm onChange={setPassword} value={password} placeholder="password" />
+
                     <Button
                         onClick={handleSignIn}
                         disable={!email || !password ? true : false}
@@ -103,6 +109,7 @@ function SignInPage() {
                     >
                         Đăng nhập
                     </Button>
+
                     <p style={{ fontSize: '1.2rem' }}>
                         Chưa có tài khoản ?{' '}
                         <WrappperTextLight onClick={handleNavigated}> Tạo tài khoản</WrappperTextLight>
