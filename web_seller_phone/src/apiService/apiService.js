@@ -76,3 +76,21 @@ export const getDetailUserRequest = async (id, access_token) => {
     }
 };
 
+export const getAllOrders = async (access_token) => {
+    try {
+      const res = await request.get('api/admin/orders',{ 
+         headers: {
+        Authorization: `Bearer ${access_token}`,
+
+      } ,
+    }); 
+      if (res.status === 200) {
+        return res.data;
+      } else {
+        throw new Error('Failed to fetch orders');
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      throw error; 
+    }
+  };
