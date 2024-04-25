@@ -159,3 +159,25 @@ export const orderItemRequest = async (data, access_token) => {
         console.log(error);
     }
 };
+export const updateProductRequest = async (id, data) => {
+    try {
+        const res = await request.put(`/api/put/product/${id}`, data);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getAllOderRequest = async (access_token) => {
+    console.log(access_token);
+    try {
+        const res = await request.get('/api/admin/orders', {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
