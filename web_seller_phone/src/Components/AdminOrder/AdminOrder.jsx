@@ -1,20 +1,32 @@
-import { Table } from 'antd';
+import { Table, Button, Modal } from 'antd';
 import { useState, useEffect } from 'react';
-import { getAllOderRequest } from '../../apiService/apiService';
+import { getAllOderRequest, deleteOrderRequest } from '../../apiService/apiService'; // Import hàm xóa
 import { useSelector } from 'react-redux';
 
 function AdminOrder() {
     const user = useSelector((state) => state.user);
     const [order, setOrder] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
-        const fetchApi = async () => {
-            const data = await getAllOderRequest(user.access_token);
-            setOrder(data);
-        };
-        fetchApi();
+      const fetchApi = async () => {
+        const data = await getAllOderRequest(user.access_token);
+        console.log(data);
+        setOrder(data); 
+      };
+      fetchApi();
     }, [user]);
     console.log(user);
-
+    const handleDelete = async (orderId) => {
+      try {
+        setIsLoading(true);
+        await deleteOrderRequest(orderId, user.access_token);
+        setOrder(order.filter((item) => item.id_order !== orderId)); // Cập nhật dữ liệu sau khi xóa
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error deleting order:', error);
+        setIsLoading(false);
+      }
+    };
     const columns = [
         {
             title: 'id_user',
@@ -87,6 +99,27 @@ function AdminOrder() {
                     <h5>{text}</h5>
                 </div>
             ),
+        },
+        {
+          title: 'Hành động',
+          key: '9',
+          render: (_, record) => (
+            <Button
+              type="danger"
+              onClick={() => {
+                Modal.confirm({
+                  title: 'Xóa đơn hàng?',
+                  content: 'Bạn có chắc muốn xóa đơn hàng này?',
+                  okText: 'Xóa',
+                  okType: 'danger',
+                  onOk: () => handleDelete(record.id_order), // Gọi hàm xóa khi xác nhận
+                  cancelText: 'Hủy',
+                });
+              }}
+            >
+              Xóa
+            </Button>
+          ),
         },
     ];
     const data = order

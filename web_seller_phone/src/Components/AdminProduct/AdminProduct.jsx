@@ -72,13 +72,32 @@ const AdminProduct = () => {
         setIsDrawerOpen(true);
     };
 
-    const handleDeleteProduct = (productId) => {
-        setSelectedProduct(productId);
-        setIsModalDeleteOpen(true);
+    const handleDeleteProduct = async (productId) => {
+        try {
+            await deleteMutation.mutateAsync(productId);
+            notification.success({
+                message: 'Delete Successful',
+                description: 'The product has been deleted successfully.',
+            });
+            queryClient.invalidateQueries('products');
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
     };
 
-    const handleConfirmDelete = () => {
-        deleteMutation.mutate(selectedProduct.id_product);
+    const handleConfirmDelete = async () => {
+        if (!selectedProduct || !selectedProduct.id_product) {
+            console.error('Selected product or product ID is undefined');
+            return;
+        }
+        try {
+            await deleteMutation.mutateAsync(selectedProduct.id_product);
+            setIsModalDeleteOpen(false); // Close the confirmation modal after successful deletion
+            success('Product deleted successfully');
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            // Handle error, show error message, etc.
+        }
     };
 
     return (

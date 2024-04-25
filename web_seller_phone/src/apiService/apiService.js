@@ -181,3 +181,16 @@ export const getAllOderRequest = async (access_token) => {
         console.log(error);
     }
 };
+export const deleteOrderRequest = async (id) => {
+    const access_token = localStorage.getItem('access_token');
+    try {
+      const response = await request.delete(`/api/orders/${id}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`, // Thêm token để xác thực
+        },
+      });
+      return response.data; // Phản hồi dữ liệu nếu cần thiết
+    } catch (error) {
+      throw error; // Xử lý lỗi
+    }
+  };
