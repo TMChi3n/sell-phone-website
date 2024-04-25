@@ -60,7 +60,7 @@ function SignUpPage() {
                         placeholder="UserName"
                     />
                     <InputForm onChange={setEmail} value={email} style={{ marginBottom: '10px' }} placeholder="Email" />
-                    <InputForm onChange={setPassword} value={password} placeholder="password" />
+                    <InputForm onChange={setPassword} type="password" value={password} placeholder="password" />
 
                     <Button
                         onClick={handleSignUp}
