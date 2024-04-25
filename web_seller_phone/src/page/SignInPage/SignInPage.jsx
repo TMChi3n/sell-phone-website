@@ -3,15 +3,19 @@ import Button from '../../Components/Button';
 import InputForm from '../../Components/InputForm/InputForm';
 import { WrapperContainerLeft, WrapperContainerRight, WrappperTextLight } from './style';
 import logoLogin from '../../assets/images/loginImg.jpg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { loginRequest, getDetailUserRequest } from '../../apiService/apiService';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/slides/userSlice';
+import { success, error } from '../../Components/Message/Message';
+import Loading from '../../Components/Loading/Loading';
 
 function SignInPage() {
     const navigate = useNavigate();
+    const location = useLocation();
+
     const handleNavigated = () => {
         navigate('/sign-up');
     };
@@ -28,9 +32,15 @@ function SignInPage() {
                 if (decoded) {
                     const fetchApi = async () => {
                         try {
-                            const resultUser = await getDetailUserRequest(decoded?.payload.userId, 
-                                result?.access_token);
+                            const resultUser = await getDetailUserRequest(
+                                decoded?.payload.userId,
+                                result?.access_token,
+                            );
                             console.log(resultUser);
+                            success('Đăng nhập thành công');
+
+                            localStorage.setItem('user', JSON.stringify(resultUser));
+
                             dispatch(setUser({ ...resultUser.data, access_token: token }));
                         } catch (e) {
                             alert('Error when login');
@@ -53,17 +63,22 @@ function SignInPage() {
                     email,
                     password,
                 });
+
                 console.log(result);
                 if (result.message === 'SUCCESS') {
-                    alert('Login successful');
-                    navigate('/');
+                    alert('Đăng nhập thành công');
+                    if (location?.state) {
+                        navigate(location?.state);
+                    } else {
+                        navigate('/');
+                    }
                     localStorage.setItem('access_token', JSON.stringify(result?.access_token));
                     handleToken(result);
                 } else {
-                    alert('Login failed: ' + result.message);
+                    error(result.message);
                 }
             } catch (e) {
-                alert('Error when login');
+                error('Đã xảy ra lỗi ');
             }
         };
 
@@ -84,7 +99,7 @@ function SignInPage() {
                     <h1>Xin chào</h1>
                     <p style={{ marginBottom: '50px' }}>Đăng nhập vào tài khoản bằng email</p>
                     <InputForm onChange={setEmail} value={email} style={{ marginBottom: '10px' }} placeholder="Email" />
-                    <InputForm onChange={setPassword} value={password} placeholder="password" />
+                    <InputForm onChange={setPassword} type="password" value={password} placeholder="password" />
                     <Button
                         onClick={handleSignIn}
                         disable={!email || !password ? true : false}
@@ -93,13 +108,14 @@ function SignInPage() {
                     >
                         Đăng nhập
                     </Button>
+
                     <p style={{ fontSize: '1.2rem' }}>
                         Chưa có tài khoản ?{' '}
                         <WrappperTextLight onClick={handleNavigated}> Tạo tài khoản</WrappperTextLight>
                     </p>
                 </WrapperContainerLeft>
                 <WrapperContainerRight style={{ borderRadius: '6px' }}>
-                    <Image src={logoLogin} preview={false} alt="iamge-logo" height="100%" width="100%" />
+                    <Image src={logoLogin} preview={false} alt="iamge-logo" height="100%" width="130%" />
                 </WrapperContainerRight>
             </div>
         </div>

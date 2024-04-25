@@ -3,25 +3,27 @@ import Product from '../../model/ProductModel.js';
 
 const deleteProduct = async (id) => {
     try {
-      const checkProduct = await Product.findByPk(id);
-      if (!checkProduct) {
+        const checkProduct = await Product.findByPk(id);
+        if (!checkProduct) {
+            return {
+                status: 'error',
+                message: 'The product is not defined',
+            };
+        }
+
+        await Product.destroy({
+            where: {
+                id_product: id,
+            },
+        });
+
         return {
-          status: 'error',
-          message: 'Product not found',
+            status: 'success',
+            message: 'Product deleted successfully',
         };
-      }
-      await Product.destroy({
-        where: {
-          id_product: id,
-        },
-      });
-      return {
-        status: 'success',
-        message: 'Product deleted successfully',
-      };
     } catch (error) {
-      throw new Error('Error deleting product: ' + error.message);
+        throw error;
     }
-  };
-  
+};
+
 export { deleteProduct };

@@ -1,4 +1,3 @@
-import Cart from '../model/Cart.js';
 import CartService from '../services/Cart/CartService.js';
 
 const addToCart = async (req, res) => {
@@ -58,4 +57,19 @@ const decreaseCartQuantity = async (req, res) => {
     }
 };
 
-export { addToCart, getCartItems, increaseCartQuantity, decreaseCartQuantity };
+const removeProduct = async (req, res) => {
+    const id_cart_item = req.params.id_cart_item;
+    try {
+        const result = await CartService.removeProductWithoutCart(id_cart_item);
+        if (result.status === 'OK') {
+            res.json({ message: result.message });
+        } else {
+            res.status(404).json({ message: result.message });
+        }
+    } catch (error) {
+        console.error('Error removing item:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+export { addToCart, getCartItems, increaseCartQuantity, decreaseCartQuantity, removeProduct };
