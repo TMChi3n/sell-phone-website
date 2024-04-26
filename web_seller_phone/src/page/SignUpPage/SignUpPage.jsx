@@ -5,6 +5,7 @@ import { Image } from 'antd';
 import logoLogin from '../../assets/images/Login.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { success, error } from '../../Components/Message/Message';
 import { registerRequest } from '../../apiService/apiService';
 
 function SignUpPage() {
@@ -25,8 +26,9 @@ function SignUpPage() {
                     password,
                 });
                 console.log(result);
+                success('Đăng ký thành công');
                 if (result.message === 'SUCCESS') {
-                    alert('Registration successful');
+                    // alert('Đăng ký thành công');
                     navigate('/sign-in');
                 } else {
                     alert('Registration failed: ' + result.message);
