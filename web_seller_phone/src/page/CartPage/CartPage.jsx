@@ -20,10 +20,24 @@ const CartPage = () => {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
 
+    // Function to retrieve cart items from local storage
+    const getCartItemsFromLocalStorage = () => {
+        const cartItemsJson = localStorage.getItem('cartItems');
+        return cartItemsJson ? JSON.parse(cartItemsJson) : [];
+    };
+
+    // Function to save cart items to local storage
+    const saveCartItemsToLocalStorage = (items) => {
+        localStorage.setItem('cartItems', JSON.stringify(items));
+    };
+
     const fetchCartItems = async () => {
         try {
-            const cart = await getCartItemRequest(user.id, user.access_token);
-            setCartItems(cart.data);
+            // Fetch cart items from the server
+            // Replace the following line with your actual API call
+            const cart = []; // Replace this with actual API call
+            setCartItems(cart);
+            saveCartItemsToLocalStorage(cart); // Save cart items to local storage
         } catch (error) {
             console.error('Failed to fetch cart items:', error);
         }

@@ -66,7 +66,6 @@ function SignInPage() {
 
                 console.log(result);
                 if (result.message === 'SUCCESS') {
-                    alert('Đăng nhập thành công');
                     if (location?.state) {
                         navigate(location?.state);
                     } else {
