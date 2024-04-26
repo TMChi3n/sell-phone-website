@@ -9,6 +9,9 @@ const ProductTable = ({ products, handleEditProduct, handleDeleteProduct }) => {
         { title: 'Price', dataIndex: 'price', key: 'price' },
         { title: 'Stock', dataIndex: 'stock_quantity', key: 'stock_quantity' },
         { title: 'Brand', dataIndex: 'brand', key: 'brand' },
+        
+        // { title: 'Description', dataIndex: 'descrip_product', key: 'descrip_product' },
+      
         {
             title: 'Image',
             dataIndex: 'url_picture', // Hiển thị ảnh sản phẩm
@@ -33,6 +36,7 @@ const ProductTable = ({ products, handleEditProduct, handleDeleteProduct }) => {
             ),
         },
     ];
+
 
     return <Table dataSource={products} columns={productColumns} rowKey={(record) => record.id_product} />;
 };
