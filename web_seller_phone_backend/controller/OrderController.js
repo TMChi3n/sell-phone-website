@@ -30,7 +30,16 @@ const getAllOrder = async (req, res) => {
         res.status(500).json({ message: result.message });
     }
 };
-
+const deleteOrder = async (req, res) => {
+    const orderId = req.params.id;
+  
+    try {
+      await orderService.deleteOrderById(orderId);
+      res.status(200).send({ message: 'Order deleted successfully' }); // Phản hồi thành công
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  };
 export default {
-    createOrderFromCartController,getAllOrder
+    createOrderFromCartController,getAllOrder,deleteOrder
 };

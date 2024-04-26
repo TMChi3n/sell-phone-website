@@ -1,13 +1,12 @@
 // ProductService.js
 import Product from '../../model/ProductModel.js';
-
 const deleteProduct = async (id) => {
     try {
         const checkProduct = await Product.findByPk(id);
         if (!checkProduct) {
             return {
                 status: 'error',
-                message: 'The product is not defined',
+                message: 'The product does not exist',
             };
         }
 

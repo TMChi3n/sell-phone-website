@@ -66,7 +66,22 @@ const getAllOrders = async () => {
     }
 };
 
-
+const deleteOrderById = async (orderId) => {
+    try {
+      await OrderItem.destroy({
+        where: {
+          id_order: orderId,
+        },
+      });
+      await Order.destroy({
+        where: {
+          id_order: orderId,
+        },
+      });
+    } catch (error) {
+      throw error; 
+    }
+  };
 export default {
-    createOrderFromCartService,getAllOrders
+    createOrderFromCartService,getAllOrders,deleteOrderById
 };
