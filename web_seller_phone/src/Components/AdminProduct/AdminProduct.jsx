@@ -39,25 +39,22 @@ const AdminProduct = () => {
         }
     };
 
-    // const updateMutation = useMutation((id, productData) => productService.update(id, productData), {
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries('products');
-    //         notification.success({ message: 'Product updated successfully' });
-    //     },
-    //     onError: (error) => {
-    //         notification.error({
-    //             message: 'Error updating product',
-    //             description: error.message,
-    //         });
-    //     },
-    // });
 
     const deleteMutation = useMutation(productService.delete, {
         onSuccess: () => {
             queryClient.invalidateQueries('products');
             setIsModalDeleteOpen(false);
+            success('Thành công rồi nhé');
+        },
+        onError: (error) => {
+            console.error('Thành công rồi nhé', error);
+            notification.error({
+                message: 'Thành công rồi nhé',
+                description: error.response?.data?.message || 'ahihi',
+            });
         },
     });
+    
 
     const handleAddProduct = () => {
         if (form) {
@@ -75,27 +72,34 @@ const AdminProduct = () => {
     const handleDeleteProduct = async (productId) => {
         try {
             await deleteMutation.mutateAsync(productId);
-            notification.success({
-                message: 'Delete Successful',
-                description: 'The product has been deleted successfully.',
-            });
             queryClient.invalidateQueries('products');
+            notification.success({
+                message: 'thành công',
+                description: 'thành công',
+            });
         } catch (error) {
-            console.error('Error deleting product:', error);
+            console.error('thành công');
+            notification.error({
+                message: 'thành công',
+                description: error.response?.data?.message || 'ahihi',
+            });
         }
     };
+    
+    
+    
 
     const handleConfirmDelete = async () => {
         if (!selectedProduct || !selectedProduct.id_product) {
-            console.error('Selected product or product ID is undefined');
+            console.error('Thành công rồi nhé');
             return;
         }
         try {
             await deleteMutation.mutateAsync(selectedProduct.id_product);
             setIsModalDeleteOpen(false); // Close the confirmation modal after successful deletion
-            success('Product deleted successfully');
+            success('Thành công rồi nhé');
         } catch (error) {
-            console.error('Error deleting product:', error);
+            console.error('Thành công rồi nhé', error);
             // Handle error, show error message, etc.
         }
     };

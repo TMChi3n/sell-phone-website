@@ -50,7 +50,6 @@ const createOrderFromCartService = async (id_user, address, phone_number,usernam
 
 const getAllOrders = async () => {
     try {
-        // Lấy tất cả các đơn đặt hàng từ mô hình
         const orders = await Order.findAll();
         return {
             status: 'OK',

@@ -22,5 +22,32 @@ const generateRefreshToken = async (payload) => {
     );
     return refresh_token;
 };
-
-export { generateAccessToken, generateRefreshToken };
+const refreshTokenJwtService = (authorization) => {
+    return new Promise((resolve, reject) => {
+        try{
+                jwt.verify(authorization,process.env.REFRESH_TOKEN,async(err,user) => {
+                    if (err) {
+                        resolve({
+                            status: 'ERR',
+                            message: 'The authemtication'
+                        })
+                    }
+                    const access_token = await generateAccessToken({
+                    id_user: user?.id_user,
+                    isAdmin: user?.isAdmin
+                })
+                resolve({
+                    status: 'OK',
+                    message: 'Success',
+                    access_token
+                })
+            
+                })
+                
+                
+        }catch (e) {
+            reject(e)
+        }
+    })
+}
+export { generateAccessToken, generateRefreshToken,refreshTokenJwtService };

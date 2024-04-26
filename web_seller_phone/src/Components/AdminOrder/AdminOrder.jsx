@@ -17,16 +17,16 @@ function AdminOrder() {
     }, [user]);
     console.log(user);
     const handleDelete = async (orderId) => {
-      try {
-        setIsLoading(true);
-        await deleteOrderRequest(orderId, user.access_token);
-        setOrder(order.filter((item) => item.id_order !== orderId)); // Cập nhật dữ liệu sau khi xóa
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error deleting order:', error);
-        setIsLoading(false);
-      }
-    };
+        try {
+          setIsLoading(true);
+          await deleteOrderRequest(orderId, user.access_token);
+          setOrder(order.filter((item) => item.id_order !== orderId)); // Cập nhật dữ liệu sau khi xóa
+          setIsLoading(false);
+        } catch (error) {
+          console.error('Error deleting order:', error);
+          setIsLoading(false);
+        }
+      };
     const columns = [
         {
             title: 'id_user',
