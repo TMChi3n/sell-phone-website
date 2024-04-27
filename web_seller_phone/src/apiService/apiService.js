@@ -194,3 +194,12 @@ export const deleteOrderRequest = async (id) => {
       throw error; // Xử lý lỗi
     }
   };
+  export const axiosJWT = request.create()
+  export const refreshToken = async (refreshToken) => {
+    const res = await request.post(`/user/refresh-token`, {} , {
+        headers: {
+            Authorization: `Bearer ${refreshToken}`,
+        }
+    })
+    return res.data
+}

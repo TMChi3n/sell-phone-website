@@ -2,7 +2,7 @@ import { CreateUser } from '../services/User/CreateUserService.js';
 import { LoginUser } from '../services/User/LoginService.js';
 import { ListUsers } from '../services/User/ListUser.js';
 import { GetDetailsUser } from '../services/User/GetDetailsUser.js';
-
+import { refreshTokenJwtService } from '../services/JwtService.js'
 const createUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -84,4 +84,27 @@ const getAllUser = async (req, res) => {
     }
 };
 
-export { createUser, loginUser, getAllUser, getDetailsUser };
+const refreshToken = async (req, res) => {
+    try {
+        if (!req.headers.authorization) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The token is required'
+            })
+        }
+        let authorization = req.headers.authorization.split(' ')[1]
+        if(!authorization){
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The token is required'
+            })
+        }
+        const response = await refreshTokenJwtService(authorization)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e.message
+        })
+    }
+}
+export { createUser, loginUser, getAllUser, getDetailsUser, refreshToken };

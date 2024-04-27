@@ -1,124 +1,94 @@
-import { Image } from 'antd';
-import Button from '../../Components/Button';
-import InputForm from '../../Components/InputForm/InputForm';
-import { WrapperContainerLeft, WrapperContainerRight, WrappperTextLight } from './style';
-import logoLogin from '../../assets/images/loginImg.jpg';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import { loginRequest, getDetailUserRequest } from '../../apiService/apiService';
-import { jwtDecode } from 'jwt-decode';
+import { Form, Input, Button, Image } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/slides/userSlice';
 import { success, error } from '../../Components/Message/Message';
-import Loading from '../../Components/Loading/Loading';
+import { loginRequest, getDetailUserRequest } from '../../apiService/apiService';
+import { jwtDecode } from 'jwt-decode';
+import logoLogin from '../../assets/images/loginImg.jpg';
+import { WrapperContainerLeft, WrapperContainerRight, WrappperTextLight } from './style';
 
-function SignInPage() {
-    const navigate = useNavigate();
-    const location = useLocation();
+const SignInPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const handleNavigated = () => {
-        navigate('/sign-up');
-    };
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const dispatch = useDispatch();
+  const handleSignIn = async (values) => {
+    try {
+      const result = await loginRequest(values);
+      if (result.message === 'SUCCESS') {
+        success('Đăng nhập thành công');
+        localStorage.setItem('access_token', result.access_token);
+        localStorage.setItem('refresh_token', result.refresh_token);
 
-    const handleToken = (result) => {
-        if (result?.access_token) {
-            try {
-                const token = result?.access_token;
-                const decoded = jwtDecode(token);
-                console.log(decoded);
-                if (decoded) {
-                    const fetchApi = async () => {
-                        try {
-                            const resultUser = await getDetailUserRequest(
-                                decoded?.payload.userId,
-                                result?.access_token,
-                            );
-                            console.log(resultUser);
-                            success('Đăng nhập thành công');
+        const decoded = jwtDecode(result.access_token);
+        const resultUser = await getDetailUserRequest(
+          decoded?.payload.userId,
+          result.access_token
+        );
 
-                            localStorage.setItem('user', JSON.stringify(resultUser));
+        dispatch(setUser({ ...resultUser.data, access_token: result.access_token }));
+        navigate('/');
+      } else {
+        error(result.message);
+      }
+    } catch (e) {
+      error('Đã xảy ra lỗi trong quá trình đăng nhập');
+    }
+  };
 
-                            dispatch(setUser({ ...resultUser.data, access_token: token }));
-                        } catch (e) {
-                            alert('Error when login');
-                        }
-                    };
-
-                    fetchApi();
-                }
-            } catch (decodeError) {
-                console.error('Error decoding token:', decodeError);
-            }
-        } else {
-            console.log('No access token received');
-        }
-    };
-    const handleSignIn = () => {
-        const fetchApi = async () => {
-            try {
-                const result = await loginRequest({
-                    email,
-                    password,
-                });
-
-                console.log(result);
-                if (result.message === 'SUCCESS') {
-                    if (location?.state) {
-                        navigate(location?.state);
-                    } else {
-                        navigate('/');
-                    }
-                    localStorage.setItem('access_token', JSON.stringify(result?.access_token));
-                    handleToken(result);
-                } else {
-                    error(result.message);
-                }
-            } catch (e) {
-                error('Đã xảy ra lỗi ');
-            }
-        };
-
-        fetchApi();
-    };
-    return (
-        <div
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'rgba(0, 0, 0, 0.53)',
-                height: '100vh',
-            }}
-        >
-            <div style={{ width: '1000px', height: '445px', borderRadius: '6px', background: '#fff', display: 'flex' }}>
-                <WrapperContainerLeft>
-                    <h1>Xin chào</h1>
-                    <p style={{ marginBottom: '50px' }}>Đăng nhập vào tài khoản bằng email</p>
-                    <InputForm onChange={setEmail} value={email} style={{ marginBottom: '10px' }} placeholder="Email" />
-                    <InputForm onChange={setPassword} type="password" value={password} placeholder="password" />
-                    <Button
-                        onClick={handleSignIn}
-                        disable={!email || !password ? true : false}
-                        style={{ margin: '50px 0 10px' }}
-                        primary
-                    >
-                        Đăng nhập
-                    </Button>
-
-                    <p style={{ fontSize: '1.2rem' }}>
-                        Chưa có tài khoản ?{' '}
-                        <WrappperTextLight onClick={handleNavigated}> Tạo tài khoản</WrappperTextLight>
-                    </p>
-                </WrapperContainerLeft>
-                <WrapperContainerRight style={{ borderRadius: '6px' }}>
-                    <Image src={logoLogin} preview={false} alt="iamge-logo" height="100%" width="130%" />
-                </WrapperContainerRight>
-            </div>
-        </div>
-    );
-}
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(0, 0, 0, 0.53)',
+        height: '100vh',
+      }}
+    >
+      <div
+        style={{
+          width: '1000px',
+          height: '445px',
+          borderRadius: '6px',
+          background: '#fff',
+          display: 'flex',
+        }}
+      >
+        <WrapperContainerLeft>
+          <h1>Xin chào</h1>
+          <p style={{ marginBottom: '50px' }}>Đăng nhập vào tài khoản bằng email</p>
+          <Form
+            onFinish={handleSignIn}
+            style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+          >
+            <Form.Item name="email" rules={[{ required: true, message: 'Vui lòng nhập email' }]}>
+              <Input placeholder="Email" />
+            </Form.Item>
+            <Form.Item name="password" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}>
+              <Input.Password placeholder="Mật khẩu" />
+            </Form.Item>
+            <Button
+                type="primary"
+                htmlType="submit"
+                style={{ backgroundColor: 'red', borderColor: 'red', margin: '50px 0 10px' }}
+              >
+                Đăng nhập
+                  </Button>
+          </Form>
+          <p style={{ fontSize: '1.2rem' }}>
+            Chưa có tài khoản?{' '}
+            <WrappperTextLight onClick={() => navigate('/sign-up')}>
+              Đăng ký ngay
+            </WrappperTextLight>
+          </p>
+        </WrapperContainerLeft>
+        <WrapperContainerRight style={{ borderRadius: '6px' }}>
+          <Image src={logoLogin} preview={false} alt="image-logo" height="100%" width="120%" />
+        </WrapperContainerRight>
+      </div>
+    </div>
+  );
+};
 
 export default SignInPage;
