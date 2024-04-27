@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import CartItem from '../../Components/CartComponent/CartItem';
 import InputForm from '../../Components/InputForm/InputForm';
@@ -15,38 +15,19 @@ import { success } from '../../Components/Message/Message';
 
 const CartPage = () => {
     const user = useSelector((state) => state.user);
-    console.log(user);
     const [cartItems, setCartItems] = useState([]);
     const [isShowCheckout, setIsShowCheckout] = useState(false);
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
 
-<<<<<<< HEAD
-    // Function to retrieve cart items from local storage
-    const getCartItemsFromLocalStorage = () => {
-        const cartItemsJson = localStorage.getItem('cartItems');
-        return cartItemsJson ? JSON.parse(cartItemsJson) : [];
-    };
-
-    // Function to save cart items to local storage
-    const saveCartItemsToLocalStorage = (items) => {
-        localStorage.setItem('cartItems', JSON.stringify(items));
-    };
-
     const fetchCartItems = async () => {
-=======
-    const fetchCartItems = useCallback(async () => {
->>>>>>> e29d7eb994cbf6dd2197778be3f87f2060bfc6bc
         try {
-            // Fetch cart items from the server
-            // Replace the following line with your actual API call
-            const cart = []; // Replace this with actual API call
-            setCartItems(cart);
-            saveCartItemsToLocalStorage(cart); // Save cart items to local storage
+            const cart = await getCartItemRequest(user.id, user.access_token);
+            setCartItems(cart.data);
         } catch (error) {
             console.error('Failed to fetch cart items:', error);
         }
-    }, [user.id, user.access_token]);
+    };
 
     // Fetch cart items when the user changes or initially loads the page
     useEffect(() => {
