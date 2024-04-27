@@ -17,7 +17,7 @@ function TypePage() {
         {
             label: <Link to="/contact">Contact us</Link>,
             key: 'contact',
-            path: '/ontact',
+            path: '/contact',
         },
     ];
 

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { success, error } from '../../Components/Message/Message';
 import { registerRequest } from '../../apiService/apiService';
+import { useEffect } from 'react';
 
 function SignUpPage() {
     const navigate = useNavigate();
@@ -41,6 +42,21 @@ function SignUpPage() {
         fetchApi();
     };
 
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            const signUpForm = document.getElementById('sign-up-form');
+            if (signUpForm && !signUpForm.contains(e.target)) {
+                navigate('/');
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [navigate]);
+
     return (
         <div
             style={{
@@ -52,7 +68,7 @@ function SignUpPage() {
             }}
         >
             <div style={{ width: '800px', height: '445px', borderRadius: '6px', background: '#fff', display: 'flex' }}>
-                <WrapperContainerLeft>
+                <WrapperContainerLeft id="sign-up-form">
                     <h1>Xin chào</h1>
                     <p style={{ marginBottom: '50px' }}>Đăng kí tài khoản </p>
                     <InputForm
