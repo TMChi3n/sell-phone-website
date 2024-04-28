@@ -22,13 +22,6 @@ function Header({ isHiddenSearch = false, isHiddenCart = false }) {
                     <p style={{ fontSize: '1.3rem', paddingTop: '5px', paddingBottom: '10px' }}>Quản lí bán hàng</p>
                 </Link>
             ) : null}
-            <p>
-                {/* Add logout function */}
-                Log out
-                <span style={{ marginLeft: '10px' }}>
-                    <LogoutOutlined />
-                </span>
-            </p>
         </div>
     );
 
