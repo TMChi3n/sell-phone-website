@@ -2,7 +2,8 @@ import { CreateUser } from '../services/User/CreateUserService.js';
 import { LoginUser } from '../services/User/LoginService.js';
 import { ListUsers } from '../services/User/ListUser.js';
 import { GetDetailsUser } from '../services/User/GetDetailsUser.js';
-import { refreshTokenJwtService } from '../services/JwtService.js'
+import { refreshTokenJwtService } from '../services/JwtService.js';
+import logout from '../services/User/LogoutService.js';
 const createUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -89,22 +90,39 @@ const refreshToken = async (req, res) => {
         if (!req.headers.authorization) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The token is required'
-            })
+                message: 'The token is required',
+            });
         }
-        let authorization = req.headers.authorization.split(' ')[1]
-        if(!authorization){
+        let authorization = req.headers.authorization.split(' ')[1];
+        if (!authorization) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The token is required'
-            })
+                message: 'The token is required',
+            });
         }
-        const response = await refreshTokenJwtService(authorization)
-        return res.status(200).json(response)
+        const response = await refreshTokenJwtService(authorization);
+        return res.status(200).json(response);
     } catch (e) {
         return res.status(404).json({
-            message: e.message
-        })
+            message: e.message,
+        });
     }
-}
-export { createUser, loginUser, getAllUser, getDetailsUser, refreshToken };
+};
+
+const logoutUser = async (req, res) => {
+    try {
+        // Call the logout service function (corrected function name)
+        const result = await logout(req.accessToken); // Assuming req.accessToken contains the access token
+
+        // Clear the token cookie on the client side
+        res.clearCookie('accessToken');
+
+        // Send response
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Logout failed:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export { createUser, loginUser, getAllUser, getDetailsUser, refreshToken, logoutUser };

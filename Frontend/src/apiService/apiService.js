@@ -63,6 +63,25 @@ export const loginRequest = async (data) => {
         console.log(error);
     }
 };
+
+// Logout account
+export const logoutAccount = async (access_token) => {
+    try {
+        const res = await request.post(
+            '/api/logout',
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        );
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getDetailUserRequest = async (id, access_token) => {
     try {
         const res = await request.get(`api/getDetailUser/${id}`, {
@@ -184,22 +203,26 @@ export const getAllOderRequest = async (access_token) => {
 export const deleteOrderRequest = async (id) => {
     const access_token = localStorage.getItem('access_token');
     try {
-      const response = await request.delete(`/api/orders/${id}`, {
-        headers: {
-          Authorization: `Bearer ${access_token}`, // Thêm token để xác thực
-        },
-      });
-      return response.data; // Phản hồi dữ liệu nếu cần thiết
+        const response = await request.delete(`/api/orders/${id}`, {
+            headers: {
+                Authorization: `Bearer ${access_token}`, // Thêm token để xác thực
+            },
+        });
+        return response.data; // Phản hồi dữ liệu nếu cần thiết
     } catch (error) {
-      throw error; // Xử lý lỗi
+        throw error; // Xử lý lỗi
     }
-  };
-  export const axiosJWT = request.create()
-  export const refreshToken = async (refreshToken) => {
-    const res = await request.post(`/user/refresh-token`, {} , {
-        headers: {
-            Authorization: `Bearer ${refreshToken}`,
-        }
-    })
-    return res.data
-}
+};
+export const axiosJWT = request.create();
+export const refreshToken = async (refreshToken) => {
+    const res = await request.post(
+        `/user/refresh-token`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        },
+    );
+    return res.data;
+};

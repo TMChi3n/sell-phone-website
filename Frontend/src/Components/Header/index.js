@@ -8,12 +8,29 @@ import Button from '../Button';
 import Search from '../Search';
 import { useSelector } from 'react-redux';
 import { Popover } from 'antd';
+import { logoutAccount } from '../../apiService/apiService';
+import { useNavigate } from 'react-router-dom';
+import { error } from '../Message/Message.jsx';
 
 const cx = classNames.bind(styles);
 
 function Header({ isHiddenSearch = false, isHiddenCart = false }) {
     const user = useSelector((state) => state.user);
     console.log(user);
+    const navigate = useNavigate();
+
+    const logoutHandler = async () => {
+        try {
+            const result = await logoutAccount(user.access_token);
+            if (result.success) {
+                navigate('/');
+            } else {
+                error('Logout failed! Please check your account');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const content = (
         <div>
@@ -22,6 +39,13 @@ function Header({ isHiddenSearch = false, isHiddenCart = false }) {
                     <p style={{ fontSize: '1.3rem', paddingTop: '5px', paddingBottom: '10px' }}>Quản lí bán hàng</p>
                 </Link>
             ) : null}
+            <p onClick={logoutHandler} style={{ cursor: 'pointer' }}>
+                {/* Add logout function */}
+                Log out
+                <span style={{ marginLeft: '10px' }}>
+                    <LogoutOutlined />
+                </span>
+            </p>
         </div>
     );
 
