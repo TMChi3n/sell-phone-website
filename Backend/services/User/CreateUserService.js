@@ -8,7 +8,7 @@ const CreateUser = async (newUser) => {
         if (checkUser !== null) {
             return {
                 status: 'ERR',
-                message: 'The email is already in use.'
+                message: 'The email is already in use.',
             };
         }
         const hash = bcrypt.hashSync(password, 10);
@@ -21,11 +21,12 @@ const CreateUser = async (newUser) => {
             return {
                 status: 'OK',
                 message: 'SUCCESS',
-                data: createUser
+                data: createUser,
             };
         }
     } catch (e) {
         throw new Error(e.message);
     }
 };
+
 export { CreateUser };

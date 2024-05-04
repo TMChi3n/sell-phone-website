@@ -64,24 +64,6 @@ export const loginRequest = async (data) => {
     }
 };
 
-// Logout account
-export const logoutAccount = async (access_token) => {
-    try {
-        const res = await request.post(
-            '/api/logout',
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${access_token}`,
-                },
-            },
-        );
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 export const getDetailUserRequest = async (id, access_token) => {
     try {
         const res = await request.get(`api/getDetailUser/${id}`, {

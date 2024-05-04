@@ -14,7 +14,7 @@ const LoginUser = (userLogin) => {
                     status: 'ERR',
                     message: 'User not found',
                 });
-                return; 
+                return;
             }
 
             // So sánh mật khẩu
@@ -24,17 +24,17 @@ const LoginUser = (userLogin) => {
                     status: 'ERR',
                     message: 'Incorrect password',
                 });
-                return; 
+                return;
             }
 
             // Tạo AccessToken và RefreshToken với thông tin của người dùng
             const accessTokenPayload = {
                 userId: user.id_user,
-                isAdmin: user.isAdmin 
+                isAdmin: user.isAdmin
             };
             const refreshTokenPayload = {
                 userId: user.id_user,
-                isAdmin: user.isAdmin 
+                isAdmin: user.isAdmin
             };
 
             const accessToken =  await generateAccessToken(accessTokenPayload);
@@ -47,9 +47,9 @@ const LoginUser = (userLogin) => {
                 refresh_token: refreshToken,
             });
         } catch (error) {
-            reject(error); 
+            reject(error);
         }
     });
 };
 
-export { LoginUser }; 
+export { LoginUser };

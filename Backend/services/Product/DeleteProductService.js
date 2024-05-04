@@ -1,4 +1,3 @@
-// ProductService.js
 import Product from '../../model/ProductModel.js';
 const deleteProduct = async (id) => {
     try {

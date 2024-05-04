@@ -3,7 +3,6 @@ import { LoginUser } from '../services/User/LoginService.js';
 import { ListUsers } from '../services/User/ListUser.js';
 import { GetDetailsUser } from '../services/User/GetDetailsUser.js';
 import { refreshTokenJwtService } from '../services/JwtService.js';
-import logout from '../services/User/LogoutService.js';
 const createUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -109,20 +108,4 @@ const refreshToken = async (req, res) => {
     }
 };
 
-const logoutUser = async (req, res) => {
-    try {
-        // Call the logout service function (corrected function name)
-        const result = await logout(req.accessToken); // Assuming req.accessToken contains the access token
-
-        // Clear the token cookie on the client side
-        res.clearCookie('accessToken');
-
-        // Send response
-        res.status(200).json(result);
-    } catch (error) {
-        console.error('Logout failed:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-};
-
-export { createUser, loginUser, getAllUser, getDetailsUser, refreshToken, logoutUser };
+export { createUser, loginUser, getAllUser, getDetailsUser, refreshToken };
