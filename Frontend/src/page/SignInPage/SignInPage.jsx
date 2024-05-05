@@ -6,6 +6,7 @@ import { success, error } from '../../Components/Message/Message';
 import { loginRequest, getDetailUserRequest } from '../../apiService/apiService';
 import { jwtDecode } from 'jwt-decode';
 import logoLogin from '../../assets/images/loginImg.jpg';
+import google_icon from '../../assets/images/google-icon.png';
 import { WrapperContainerLeft, WrapperContainerRight, WrappperTextLight } from './style';
 import { useEffect } from 'react';
 
@@ -62,7 +63,7 @@ const SignInPage = () => {
             <div
                 id="sign-in-form"
                 style={{
-                    width: '1000px',
+                    width: '800px',
                     height: '445px',
                     borderRadius: '6px',
                     background: '#fff',
@@ -76,25 +77,30 @@ const SignInPage = () => {
                         <Form.Item name="email" rules={[{ required: true, message: 'Vui lòng nhập email' }]}>
                             <Input placeholder="Email" />
                         </Form.Item>
-                        <Form.Item name="password" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}>
+                        <Form.Item name="password" rules={[{ required: true, message: 'Vui lòng nhậ`p mật khẩu' }]}>
                             <Input.Password placeholder="Mật khẩu" />
                         </Form.Item>
+
                         <Button
                             type="primary"
                             htmlType="submit"
-                            style={{ backgroundColor: 'red', borderColor: 'red', margin: '50px 0 10px' }}
+                            style={{ backgroundColor: 'red', borderColor: 'red', margin: '10px 0 10px' }}
                         >
                             Đăng nhập
                         </Button>
+
+                        <form action="">
+                            <Image src={google_icon}> </Image>
+                        </form>
                     </Form>
                     <p style={{ fontSize: '1.2rem' }}>
                         Chưa có tài khoản?{' '}
                         <WrappperTextLight onClick={() => navigate('/sign-up')}>Đăng ký ngay</WrappperTextLight>
                     </p>
                 </WrapperContainerLeft>
-                <WrapperContainerRight style={{ borderRadius: '6px' }}>
-                    <Image src={logoLogin} preview={false} alt="image-logo" height="100%" width="120%" />
-                </WrapperContainerRight>
+                {/* <WrapperContainerRight style={{ borderRadius: '6px' }}>
+                    <Image src={logoLogin} preview={false} alt="im`age-logo" height="100%" width="120%" />
+                </WrapperContainerRight> */}
             </div>
         </div>
     );
