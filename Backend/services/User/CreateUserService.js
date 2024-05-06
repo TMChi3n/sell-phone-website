@@ -1,6 +1,6 @@
 import User from '../../model/UserModel.js';
 import bcrypt from 'bcryptjs';
-import { sendMail } from '../../email_template/SendMail.js';
+import { sendMail } from '../SendMail.js';
 
 const CreateUser = async (newUser) => {
     const { username, email, password } = newUser;

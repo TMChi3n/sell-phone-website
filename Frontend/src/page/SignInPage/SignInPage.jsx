@@ -8,7 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 import logoLogin from '../../assets/images/loginImg.jpg';
 import google_icon from '../../assets/images/google-icon.png';
 import { WrapperContainerLeft, WrapperContainerRight, WrappperTextLight } from './style';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const SignInPage = () => {
     const navigate = useNavigate();
@@ -35,20 +35,20 @@ const SignInPage = () => {
         }
     };
 
-    useEffect(() => {
-        const handleOutsideClick = (e) => {
-            const signInForm = document.getElementById('sign-in-form');
-            if (signInForm && !signInForm.contains(e.target)) {
-                navigate('/');
-            }
-        };
+    // useEffect(() => {
+    //     const handleOutsideClick = (e) => {
+    //         const signInForm = document.getElementById('sign-in-form');
+    //         if (signInForm && !signInForm.contains(e.target)) {
+    //             navigate('/');
+    //         }
+    //     };
 
-        document.addEventListener('mousedown', handleOutsideClick);
+    //     document.addEventListener('mousedown', handleOutsideClick);
 
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick);
-        };
-    }, [navigate]);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleOutsideClick);
+    //     };
+    // }, [navigate]);
 
     return (
         <div

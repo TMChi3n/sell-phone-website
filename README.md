@@ -83,3 +83,9 @@ This repository contains the MySQL database schema for managing phone data, incl
 
 -   `npx create-react-app my-app`
 -   `npx install-peerdeps --dev @ant-design/icons @emotion/react @emotion/styled @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome @reduxjs/toolkit antd axios classnames jwt-decode normalize.css react react-dom react-icons react-query react-redux react-router-dom react-scripts react-slick redux redux-thunk slick-carousel styled-components web-vitals`
+-   `npm install @react-oauth/google@latest` 
+
+## Alter
+ALTER TABLE order_items 
+ADD COLUMN id_order INT,
+ADD CONSTRAINT fk_order_items_orders FOREIGN KEY (id_order) REFERENCES orders(id_order);

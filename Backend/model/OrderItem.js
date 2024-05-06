@@ -1,41 +1,37 @@
 import { DataTypes } from 'sequelize';
-import db from '../db.js';
+import db from '../config/db.js';
 import Order from './order.js';
 import Product from './ProductModel.js';
 
 const OrderItem = db.define(
-  'OrderItem',
-  {
-    id_order_item: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+    'OrderItem',
+    {
+        id_order_items: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        address: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        phone_number: {
+            type: DataTypes.BIGINT,
+            allowNull: false,
+        },
+        total_amount: {
+            type: DataTypes.DECIMAL(20, 2),
+            allowNull: false,
+        },
     },
-    id_order: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Order,
-        key: 'id_order',
-      },
+    {
+        timestamps: false,
+        tableName: 'order_items',
     },
-    id_product: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Product,
-        key: 'id_product',
-      },
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-  },
-  {
-    timestamps: false,
-    tableName: 'order_items',
-  },
 );
 
 export default OrderItem;

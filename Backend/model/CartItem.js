@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import db from '../db.js';
+import db from '../config/db.js';
 import Product from './ProductModel.js';
 import Cart from './Cart.js';
 const CartItem = db.define('CartItem', {
