@@ -1,4 +1,7 @@
 import request from '../utils/request';
+import { error } from '../Components/Message/Message'
+
+// products
 export const getAllProductRequest = async () => {
     try {
         const res = await request.get('/api/get/product');
@@ -39,6 +42,21 @@ export const filterRequest = async (category) => {
         console.log(error);
     }
 };
+
+// user
+// export const axiosJWT = request.create();
+// export const refreshToken = async (refreshToken) => {
+//     const res = await request.post(
+//         `/user/refresh-token`,
+//         {},
+//         {
+//             headers: {
+//                 Authorization: `Bearer ${refreshToken}`,
+//             },
+//         },
+//     );
+//     return res.data;
+// };
 export const getAllUserRequest = async () => {
     try {
         const res = await request.get('/api/get/users');
@@ -64,7 +82,7 @@ export const loginRequest = async (data) => {
     }
 };
 
-// Logout account
+
 export const logoutAccount = async (access_token) => {
     try {
         const res = await request.post(
@@ -82,6 +100,7 @@ export const logoutAccount = async (access_token) => {
     }
 };
 
+
 export const getDetailUserRequest = async (id, access_token) => {
     try {
         const res = await request.get(`api/getDetailUser/${id}`, {
@@ -94,6 +113,8 @@ export const getDetailUserRequest = async (id, access_token) => {
         console.log(error);
     }
 };
+
+// cart
 export const getCartItemRequest = async (id, access_token) => {
     console.log(access_token, id);
     try {
@@ -165,6 +186,8 @@ export const deleteItemRequest = async (id_cart_item, access_token) => {
         console.log(error);
     }
 };
+
+// orders
 export const orderItemRequest = async (data, access_token) => {
     console.log(access_token);
     try {
@@ -178,15 +201,6 @@ export const orderItemRequest = async (data, access_token) => {
         console.log(error);
     }
 };
-export const updateProductRequest = async (id, data) => {
-    try {
-        const res = await request.put(`/api/put/product/${id}`, data);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 export const getAllOderRequest = async (access_token) => {
     console.log(access_token);
     try {
@@ -213,16 +227,43 @@ export const deleteOrderRequest = async (id) => {
         throw error; // Xử lý lỗi
     }
 };
-export const axiosJWT = request.create();
-export const refreshToken = async (refreshToken) => {
-    const res = await request.post(
-        `/user/refresh-token`,
-        {},
-        {
-            headers: {
-                Authorization: `Bearer ${refreshToken}`,
-            },
-        },
-    );
-    return res.data;
+
+// admin product
+export const updateProductRequest = async (id, data) => {
+    try {
+        const res = await request.put(`/api/put/product/${id}`, data);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
 };
+export const createProductRequest = async (data, access_token) => {
+    try {
+        const res = await request.post(`/api/post/product`, data,{
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const deleteProductRequest = async (id, access_token) => {
+    try {
+        const res = await request.delete(`/api/delete/product/${id}`,{
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+
+            }
+        });
+        return res.data;
+    } catch (e) {
+        console.log(e);
+        error('Không thể xoá sản phẩm này')
+    }
+};
+
+
+

@@ -55,7 +55,7 @@ function HomePage() {
     }, [searchParams]);
 
     return (
-        <div style={{ height: '2000px' }}>
+        <div style={{ minHeight: '2000px' }}>
             <TypePage> </TypePage>
 
             <SliderComponent />

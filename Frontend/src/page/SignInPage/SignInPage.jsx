@@ -13,24 +13,59 @@ const SignInPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    // const handleSignIn = async (values) => {
+    //     try {
+    //         const result = await loginRequest(values);
+    //         if (result.message === 'SUCCESS') {
+    //             success('Đăng nhập thành công');
+    //             localStorage.setItem('access_token', result.access_token);
+    //             localStorage.setItem('refresh_token', result.refresh_token);
+
+    //             const decoded = jwtDecode(result.access_token);
+    //             const resultUser = await getDetailUserRequest(decoded?.payload.userId, result.access_token);
+
+    //             dispatch(setUser({ ...resultUser.data, access_token: result.access_token }));
+    //             navigate('/');
+    //         } else {
+    //             error(result.message);
+    //         }
+    //     } catch (e) {
+    //         error('Đã xảy ra lỗi trong quá trình đăng nhập');
+    //     }
+    // };
+    const handleToken = async (token) => {
+        try {
+            const decoded = jwtDecode(token);
+            if (decoded && decoded.payload && decoded.payload.userId) {
+                const userId = decoded.payload.userId;
+                const resultUser = await getDetailUserRequest(userId, token);
+                dispatch(setUser({ ...resultUser.data, access_token: token }));
+                navigate('/');
+    
+            } else {
+                throw new Error('Invalid token payload');
+            }
+        } catch (error) {
+            console.error('Error handling token:', error);
+            alert('An error occurred during token handling. Please try again later.');
+        }
+    };
+    
+    
     const handleSignIn = async (values) => {
         try {
             const result = await loginRequest(values);
-            if (result.message === 'SUCCESS') {
-                success('Đăng nhập thành công');
-                localStorage.setItem('access_token', result.access_token);
-                localStorage.setItem('refresh_token', result.refresh_token);
-
-                const decoded = jwtDecode(result.access_token);
-                const resultUser = await getDetailUserRequest(decoded?.payload.userId, result.access_token);
-
-                dispatch(setUser({ ...resultUser.data, access_token: result.access_token }));
-                navigate('/');
+    
+            if (result.message === 'SUCCESS' && result.access_token) {
+    
+                localStorage.setItem('access_token', JSON.stringify(result.access_token));
+                handleToken(result.access_token);
             } else {
-                error(result.message);
+                alert('Login failed: ' + result.message);
             }
-        } catch (e) {
-            error('Đã xảy ra lỗi trong quá trình đăng nhập');
+        } catch (error) {
+            console.error('Error during login:', error);
+            alert('An error occurred during login. Please try again later.');
         }
     };
 
@@ -101,3 +136,7 @@ const SignInPage = () => {
 };
 
 export default SignInPage;
+
+
+
+

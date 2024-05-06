@@ -1,6 +1,6 @@
 import { Table, Button, Modal } from 'antd';
 import { useState, useEffect } from 'react';
-import { getAllOderRequest, deleteOrderRequest } from '../../apiService/apiService'; // Import hàm xóa
+import { getAllOderRequest, deleteOrderRequest } from '../../apiService/apiService'
 import { useSelector } from 'react-redux';
 
 function AdminOrder() {
@@ -32,7 +32,7 @@ function AdminOrder() {
             title: 'id_user',
             dataIndex: 'id_user',
             key: '1',
-            // render: (text) => <a>{text}</a>,
+            render: (text) => <a>{text}</a>,
         },
         {
             title: 'id_order',

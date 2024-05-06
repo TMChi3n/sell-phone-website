@@ -1,8 +1,10 @@
-import React from 'react';
 import { Table, Button, Space } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {useSelector} from 'react-redux'
 
-const ProductTable = ({ products, handleEditProduct, handleDeleteProduct }) => {
+const ProductTable = ({ products, handleEditProduct, handleConfirmDelete }) => {
+    const user = useSelector((state) => state.user)
+
     const productColumns = [
         { title: 'Product ID', dataIndex: 'id_product', key: 'id_product' },
         { title: 'Name', dataIndex: 'nameProduct', key: 'nameProduct' },
@@ -30,7 +32,7 @@ const ProductTable = ({ products, handleEditProduct, handleDeleteProduct }) => {
             render: (text, record) => (
                 <Space>
                     <Button icon={<EditOutlined />} onClick={() => handleEditProduct(record)} />
-                    <Button icon={<DeleteOutlined />} onClick={() => handleDeleteProduct(record.id_product)} />
+                    <Button icon={<DeleteOutlined />} onClick={() => handleConfirmDelete(record.id_product, user.access_token)} />
                 </Space>
             ),
         },
