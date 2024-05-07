@@ -1,6 +1,8 @@
 import User from "../../model/userModel.js";
 import bcrypt from "bcryptjs";
 import { generateAccessToken, generateRefreshToken } from "../jwtService.js";
+import { OAuth2Client } from "google-auth-library";
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const LoginUser = (userLogin) => {
   return new Promise(async (resolve, reject) => {

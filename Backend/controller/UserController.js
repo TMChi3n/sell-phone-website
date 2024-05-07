@@ -2,7 +2,18 @@ import { CreateUser } from "../services/User/createUserService.js";
 import { LoginUser } from "../services/User/loginService.js";
 import { ListUsers } from "../services/User/listUser.js";
 import { GetDetailsUser } from "../services/User/getDetailsUser.js";
-import { refreshTokenJwtService } from "../services/jwtService.js";
+import {
+  generateAccessToken,
+  refreshTokenJwtService,
+} from "../services/jwtService.js";
+import passportGoogleOAuth from "passport-google-oauth20";
+import dotenv from "dotenv";
+import { sendMail } from "../services/sendMail.js";
+import passport from "passport";
+
+dotenv.config();
+const { Strategy: GoogleStrategy } = passportGoogleOAuth;
+
 const createUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
