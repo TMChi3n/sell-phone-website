@@ -1,4 +1,4 @@
-import orderService from '../services/Order/OrderService.js';
+import orderService from '../services/Order/orderService.js';
 
 const createOrderFromCartController = async (req, res) => {
     const { id_user, address, phone_number, username } = req.body;

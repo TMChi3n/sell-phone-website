@@ -1,10 +1,10 @@
-import { update } from '../services/Product/UpdateProductService.js';
-import { getAllProductService } from '../services/Product/GetAllProductService.js';
-import { getProduct } from '../services/Product/GetProductByIDService.js';
-import { deleteProduct } from '../services/Product/DeleteProductService.js';
-import { create } from '../services/Product/CreateProductService.js';
-import { searchProductByName } from '../services/Product/SearchProductService.js';
-import { filterProducts } from '../services/Product/ProductFilterService.js';
+import { update } from '../services/Product/updateProductService.js';
+import { getAllProductService } from '../services/Product/getAllProductService.js';
+import { getProduct } from '../services/Product/getProductByIDService.js';
+import { deleteProduct } from '../services/Product/deleteProductService.js';
+import { create } from '../services/Product/createProductService.js';
+import { searchProductByName } from '../services/Product/searchProductService.js';
+import { filterProducts } from '../services/Product/oroductFilterService.js';
 
 const getAllProducts = async (req, res) => {
     // Your implementation for getting all products
