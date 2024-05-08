@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../config/db.js";
 import User from "./userModel.js";
 import Product from "./productModel.js";
-import OrderItem from "./OrderItem.js";
+import OrderItem from "./orderItem.js";
 
 const Order = db.define(
   "Order",

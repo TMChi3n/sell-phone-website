@@ -7,7 +7,7 @@ import {
     deleteProductById,
     searchProduct,
     filterProduct,
-} from '../controller/ProductController.js';
+} from '../controller/productController.js';
 
 const router = express.Router();
 router.get('/get/product', (req, res) => getAllProducts(req, res));

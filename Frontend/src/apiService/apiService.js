@@ -207,7 +207,7 @@ export const deleteOrderRequest = async (id) => {
 export const axiosJWT = request.create();
 export const refreshToken = async (refreshToken) => {
   const res = await request.post(
-    `/user/refresh-token`,
+    `/api/v1/user/refresh-token`,
     {},
     {
       headers: {
@@ -218,11 +218,11 @@ export const refreshToken = async (refreshToken) => {
   return res.data;
 };
 
-export const loginWithGoogle = async (tokenID) => {
-  try {
-    const res = await axios.post("/api/v1/login/google", { tokenID });
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
+// export const loginWithGoogle = async (googleToken) => {
+//   try {
+//     const res = await axios.post("/api/v1/google/login", { googleToken });
+//     return res.data;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

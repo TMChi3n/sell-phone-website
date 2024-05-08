@@ -6,7 +6,7 @@ import {
   loginUser,
   getAllUser,
   refreshToken,
-} from "../controller/UserController.js";
+} from "../controller/userController.js";
 
 const router = express.Router();
 
@@ -16,5 +16,6 @@ router.post("/login", (req, res) => loginUser(req, res));
 router.get("/get/users", (req, res) => getAllUser(req, res));
 router.get("/getDetailUser/:id_user", (req, res) => getDetailsUser(req, res));
 router.post("/refresh-token", (req, res) => refreshToken(req, res));
+// router.post("/google/login", (req, res) => loginAccountWithGoogle(req, res));
 
 export default router;

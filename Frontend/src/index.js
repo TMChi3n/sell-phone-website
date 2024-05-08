@@ -6,7 +6,6 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import SignInPage from "./page/SignInPage/SignInPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

@@ -1,5 +1,5 @@
 import { CreateUser } from "../services/User/createUserService.js";
-import { LoginUser } from "../services/User/loginService.js";
+import { LoginUser, verify } from "../services/User/loginService.js";
 import { ListUsers } from "../services/User/listUser.js";
 import { GetDetailsUser } from "../services/User/getDetailsUser.js";
 import {
@@ -118,5 +118,26 @@ const refreshToken = async (req, res) => {
     });
   }
 };
+
+// const loginAccountWithGoogle = async (req, res) => {
+//   try {
+//     const { token } = req.body;
+//     const googleUser = await verify(token);
+//     if (googleUser) {
+//       const payload = { id_user: googleUser.sub, ...googleUser };
+//       const accessToken = await generateAccessToken(payload);
+//       const refreshToken = await refreshTokenJwtService(payload);
+//       res.json({
+//         accessToken,
+//         refreshToken,
+//         user: payload,
+//       });
+//     } else {
+//       res.status(403).json({ message: "Invalid Google token" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 export { createUser, loginUser, getAllUser, getDetailsUser, refreshToken };

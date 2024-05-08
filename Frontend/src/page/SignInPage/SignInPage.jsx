@@ -6,7 +6,6 @@ import { success, error } from "../../Components/Message/Message";
 import {
   loginRequest,
   getDetailUserRequest,
-  loginWithGoogle,
 } from "../../apiService/apiService";
 import { jwtDecode } from "jwt-decode";
 import logoLogin from "../../assets/images/loginImg.jpg";
@@ -23,25 +22,35 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleGoogleSignInSuccess = async (response) => {
-    try {
-      const tokenId = response.tokenId;
-      const result = await loginWithGoogle(tokenId);
-      if (result.message === "SUCCESS") {
-        success("Đăng nhập thành công");
-        // Handle storing access token and user data
-        // Redirect or handle the signed-in user appropriately
-      } else {
-        error(result.message);
-      }
-    } catch (error) {
-      error("Đã xảy ra lỗi trong quá trình đăng nhập");
-    }
-  };
+  // const handleGoogleLogin = async (res) => {
+  //   try {
+  //     const result = await loginWithGoogle(res.tokenId);
+  //     if (result && result.message === "SUCCESS") {
+  //       success("Login successful");
+  //       localStorage.setItem("access_token", result.access_token);
+  //       localStorage.setItem("refresh_token", result.refresh_token);
 
-  const handleGoogleSignInFailure = (error) => {
-    console.error("Google Sign-In failed:", error);
-  };
+  //       const decoded = jwtDecode(result.access_token);
+  //       const resultUser = await getDetailUserRequest(
+  //         decoded?.payload.userId,
+  //         result.access_token
+  //       );
+
+  //       dispatch(
+  //         setUser({ ...setUser.data, access_token: result.access_token })
+  //       );
+  //       navigate("/");
+  //     } else {
+  //       error(result.message || "Login failed with Google");
+  //     }
+  //   } catch (error) {
+  //     error("Login failed");
+  //   }
+  // };
+
+  // const handleGoogleLoginFailure = async (res) => {
+  //   error("Cannot login with Google! Please try again");
+  // };
 
   const handleSignIn = async (values) => {
     try {
@@ -138,16 +147,23 @@ const SignInPage = () => {
               Đăng nhập
             </Button>
           </Form>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            {/* Google Sign-In button */}
-            <GoogleLogin
-              clientId="YOUR_CLIENT_ID"
-              buttonText="Đăng nhập với Google"
-              onSuccess={handleGoogleSignInSuccess}
-              onFailure={handleGoogleSignInFailure}
-              cookiePolicy={"single_host_origin"}
-            />
-          </div>
+          {/* <GoogleLogin
+            clientId="YOUR_GOOGLE_CLIENT_ID" // Replace with your actual Google Client ID
+            buttonText="Đăng nhập với Google"
+            onSuccess={handleGoogleLogin}
+            onFailure={handleGoogleLoginFailure}
+            cookiePolicy={"single_host_origin"}
+            style={{ margin: "10px 0" }}
+            render={(renderProps) => (
+              <button
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+              >
+                <img src={google_icon} alt="Google sign-in" />
+                Đăng nhập với Google
+              </button>
+            )}
+          /> */}
           <p style={{ fontSize: "1.2rem" }}>
             Chưa có tài khoản?{" "}
             <WrappperTextLight onClick={() => navigate("/sign-up")}>
@@ -155,9 +171,15 @@ const SignInPage = () => {
             </WrappperTextLight>
           </p>
         </WrapperContainerLeft>
-        {/* <WrapperContainerRight style={{ borderRadius: '6px' }}>
-                      <Image src={logoLogin} preview={false} alt="im`age-logo" height="100%" width="120%" />
-                  </WrapperContainerRight> */}
+        <WrapperContainerRight style={{ borderRadius: "6px" }}>
+          <Image
+            src={logoLogin}
+            preview={false}
+            alt="im`age-logo"
+            height="100%"
+            width="120%"
+          />
+        </WrapperContainerRight>
       </div>
     </div>
   );

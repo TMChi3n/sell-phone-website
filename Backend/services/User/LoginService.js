@@ -54,4 +54,14 @@ const LoginUser = (userLogin) => {
   });
 };
 
+// const verify = async (token) => {
+//   const ticket = await client.verifyIdToken({
+//     idToken: token,
+//     audience: process.env.GOOGLE_CLIENT_ID,
+//   });
+//   const payload = ticket.getPayload();
+//   const userid = payload["sub"];
+//   return payload;
+// };
+
 export { LoginUser };

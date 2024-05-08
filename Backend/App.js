@@ -2,11 +2,11 @@ import express from "express";
 import bodyParser from "body-parser";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
-import ProductRoutes from "./routes/ProductRoutes.js";
-import UserRoute from "./routes/UserRoute.js";
+import ProductRoutes from "./routes/productRoutes.js";
+import UserRoute from "./routes/userRoute.js";
 import cors from "cors"; // Import gói cors
-import CartRoute from "./routes/CartRoutes.js";
-import OrderRoute from "./routes/OrderRoute.js";
+import CartRoute from "./routes/cartRoutes.js";
+import OrderRoute from "./routes/orderRoute.js";
 import options from "./config/swagger_docs.js";
 
 const app = express();
