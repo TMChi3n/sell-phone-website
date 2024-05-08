@@ -8,8 +8,9 @@ import {
   getDetailUserRequest,
 } from "../../apiService/apiService";
 import { jwtDecode } from "jwt-decode";
-import logoLogin from "../../assets/images/loginImg.jpg";
+import logoLogin from "../../assets/images/Login.png";
 import google_icon from "../../assets/images/google-icon.png";
+import closeIcon from "../../assets/images/close.png";
 import {
   WrapperContainerLeft,
   WrapperContainerRight,
@@ -74,24 +75,9 @@ const SignInPage = () => {
         error(result.message);
       }
     } catch (e) {
-      error("Đã xảy ra lỗi trong quá trình đăng nhập");
+      error("The username and/or password you specified are not correct.");
     }
   };
-
-  useEffect(() => {
-    const handleOutsideClick = (e) => {
-      const signInForm = document.getElementById("sign-in-form");
-      if (signInForm && !signInForm.contains(e.target)) {
-        navigate("/");
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [navigate]);
 
   return (
     <div
@@ -107,30 +93,48 @@ const SignInPage = () => {
         id="sign-in-form"
         style={{
           width: "800px",
-          height: "445px",
+          height: "400px",
           borderRadius: "6px",
           background: "#fff",
           display: "flex",
+          position: "relative",
         }}
       >
+        <img
+          src={closeIcon}
+          alt="Close"
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            cursor: "pointer",
+            width: "20px",
+            zIndex: "1", // Ensure close button is above other content
+          }}
+          onClick={() => navigate("/")} // Add functionality to close the sign-in form
+        />
         <WrapperContainerLeft>
-          <h1>Xin chào</h1>
-          <p style={{ marginBottom: "50px" }}>
-            Đăng nhập vào tài khoản bằng email
-          </p>
+          <h1 style={{ marginBottom: "20px", textAlign: "center" }}>
+            Welcome!
+          </h1>
           <Form
             onFinish={handleSignIn}
-            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            style={{ display: "flex", flexDirection: "column", gap: "5px" }}
           >
             <Form.Item
               name="email"
-              rules={[{ required: true, message: "Vui lòng nhập email" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
             >
               <Input placeholder="Email" />
             </Form.Item>
             <Form.Item
               name="password"
-              rules={[{ required: true, message: "Vui lòng nhập mật khẩu" }]}
+              rules={[{ required: true, message: "Required" }]}
             >
               <Input.Password placeholder="Mật khẩu" />
             </Form.Item>
@@ -141,10 +145,9 @@ const SignInPage = () => {
               style={{
                 backgroundColor: "red",
                 borderColor: "red",
-                margin: "10px 0 10px",
               }}
             >
-              Đăng nhập
+              Sign In
             </Button>
           </Form>
           {/* <GoogleLogin
@@ -164,20 +167,18 @@ const SignInPage = () => {
               </button>
             )}
           /> */}
-          <p style={{ fontSize: "1.2rem" }}>
-            Chưa có tài khoản?{" "}
-            <WrappperTextLight onClick={() => navigate("/sign-up")}>
-              Đăng ký ngay
-            </WrappperTextLight>
-          </p>
+
+          <WrappperTextLight onClick={() => navigate("/sign-up")}>
+            Sign Up
+          </WrappperTextLight>
         </WrapperContainerLeft>
         <WrapperContainerRight style={{ borderRadius: "6px" }}>
           <Image
             src={logoLogin}
             preview={false}
-            alt="im`age-logo"
-            height="100%"
-            width="120%"
+            alt="iamge-logo"
+            height="203px"
+            width="203px"
           />
         </WrapperContainerRight>
       </div>

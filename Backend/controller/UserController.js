@@ -1,5 +1,5 @@
 import { CreateUser } from "../services/User/createUserService.js";
-import { LoginUser, verify } from "../services/User/loginService.js";
+import { LoginUser } from "../services/User/loginService.js";
 import { ListUsers } from "../services/User/listUser.js";
 import { GetDetailsUser } from "../services/User/getDetailsUser.js";
 import {
