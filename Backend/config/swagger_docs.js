@@ -1,21 +1,24 @@
-import { info } from 'console';
-import { version } from 'os';
-import { title } from 'process';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUI from 'swagger-ui-express';
+import swaggerJSDoc from "swagger-jsdoc";
 
 const swaggerDefinition = {
-    openapi: '3.1.0',
-    info: {
-        title: 'Swagger document API',
-        version: '0.1.0',
-        description: 'Backend API',
+  openapi: "3.0.0",
+  info: {
+    title: "Phone API",
+    description: "API of functions",
+    version: "1.0.0",
+  },
+  servers: [
+    {
+      url: "http://localhost:3001",
     },
+  ],
 };
 
 const options = {
-    swaggerDefinition,
-    apis: ['./routes/**/*.js'],
+  swaggerDefinition,
+  apis: ["./routes/*.js"],
 };
 
-export default options;
+const swaggerSpec = swaggerJSDoc(options);
+
+export default swaggerSpec;

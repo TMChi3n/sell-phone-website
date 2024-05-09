@@ -14,7 +14,7 @@ import closeIcon from "../../assets/images/close.png";
 import {
   WrapperContainerLeft,
   WrapperContainerRight,
-  WrappperTextLight,
+  WrapperTextLight,
 } from "./style";
 import { useEffect, useState } from "react";
 import { GoogleLogin } from "react-google-login";
@@ -168,9 +168,9 @@ const SignInPage = () => {
             )}
           /> */}
 
-          <WrappperTextLight onClick={() => navigate("/sign-up")}>
+          <WrapperTextLight onClick={() => navigate("/sign-up")}>
             Sign Up
-          </WrappperTextLight>
+          </WrapperTextLight>
         </WrapperContainerLeft>
         <WrapperContainerRight style={{ borderRadius: "6px" }}>
           <Image

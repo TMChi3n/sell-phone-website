@@ -2,7 +2,7 @@ import InputForm from "../../Components/InputForm/InputForm";
 import {
   WrapperContainerLeft,
   WrapperContainerRight,
-  WrappperTextLight,
+  WrapperTextLight,
 } from "../SignInPage/style";
 import Button from "../../Components/Button";
 import { Image } from "antd";
@@ -127,10 +127,10 @@ function SignUpPage() {
 
           <p style={{ fontSize: "1.5rem", fontFamily: "Times New Roman" }}>
             Have an account ?{" "}
-            <WrappperTextLight onClick={handleNavigated}>
+            <WrapperTextLight onClick={handleNavigated}>
               {" "}
               Sign In{" "}
-            </WrappperTextLight>
+            </WrapperTextLight>
           </p>
         </WrapperContainerLeft>
         <WrapperContainerRight style={{ borderRadius: "6px" }}>

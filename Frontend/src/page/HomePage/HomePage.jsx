@@ -1,6 +1,7 @@
 import SliderComponent from "../../Components/SliderComponent";
 import CardComponent from "../../Components/CardComponents/CardComponent";
 import { WrapperCartComponent } from "./style";
+import { Pagination } from "antd";
 import ProductFilter from "../../Components/ProductFilter/ProductFilter";
 import { useEffect, useState } from "react";
 import {
@@ -15,8 +16,8 @@ function HomePage() {
   const [products, setProducts] = useState([]);
   const [searchParams] = useSearchParams();
   const [hasFilteredProducts, setHasFilteredProducts] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 20;
+  const [currentPage, setCurrentPage] = useState(1); // State to track the current page
+  const productsPerPage = 15; // Number of products per page
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -67,22 +68,14 @@ function HomePage() {
     });
   };
 
-  // Function to handle navigation to the previous page
-  const goToPreviousPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  // Function to handle pagination change
+  const handlePaginationChange = (page) => {
+    setCurrentPage(page);
   };
-
-  // Function to handle navigation to the next page
-  const goToNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  };
-
-  // Calculate total number of pages
-  const totalPages = Math.ceil(products.length / productsPerPage);
 
   // Calculate index range for current page
   const startIndex = (currentPage - 1) * productsPerPage;
-  const endIndex = Math.min(startIndex + productsPerPage, products.length);
+  const endIndex = startIndex + productsPerPage;
 
   return (
     <div style={{ position: "relative", height: "1500px" }}>
@@ -111,34 +104,20 @@ function HomePage() {
             </p>
           )}
         </WrapperCartComponent>
-        {/* Pagination */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "0%",
-            bottom: "40px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <button onClick={goToPreviousPage} disabled={currentPage === 1}>
-            {"<"}
-          </button>
-          <span style={{ margin: "0 10px" }}>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button onClick={goToNextPage} disabled={currentPage === totalPages}>
-            {">"}
-          </button>
-        </div>
+        {/* Pagination component */}
+        <Pagination
+          style={{ marginTop: "20px", textAlign: "center" }}
+          current={currentPage}
+          pageSize={productsPerPage}
+          total={products.length}
+          onChange={handlePaginationChange}
+        />
         {/* Scroll to top button */}
         <button
           style={{
             position: "fixed",
-            bottom: "20px",
-            right: "20px",
+            bottom: "15px",
+            right: "15px",
             zIndex: "9999",
             cursor: "pointer",
             border: "none",
