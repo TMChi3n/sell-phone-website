@@ -41,6 +41,7 @@ const SignInPage = () => {
                 const resultUser = await getDetailUserRequest(userId, token);
                 dispatch(setUser({ ...resultUser.data, access_token: token }));
                 navigate('/');
+                success('Đăng nhập thành công')
     
             } else {
                 throw new Error('Invalid token payload');

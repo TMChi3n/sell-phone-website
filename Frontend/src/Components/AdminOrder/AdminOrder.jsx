@@ -1,32 +1,32 @@
 import { Table, Button, Modal } from 'antd';
 import { useState, useEffect } from 'react';
-import { getAllOderRequest, deleteOrderRequest } from '../../apiService/apiService'
+import { getAllOderRequest, deleteOrderRequest } from '../../apiService/apiService';
 import { useSelector } from 'react-redux';
-
+import Loading from '../Loading/Loading';
 function AdminOrder() {
     const user = useSelector((state) => state.user);
     const [order, setOrder] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
-      const fetchApi = async () => {
-        const data = await getAllOderRequest(user.access_token);
-        console.log(data);
-        setOrder(data); 
-      };
-      fetchApi();
+        const fetchApi = async () => {
+            setIsLoading(true);
+            const data = await getAllOderRequest(user.access_token);
+            console.log(data);
+            setIsLoading(false);
+
+            setOrder(data);
+        };
+        fetchApi();
     }, [user]);
     console.log(user);
     const handleDelete = async (orderId) => {
         try {
-          setIsLoading(true);
-          await deleteOrderRequest(orderId, user.access_token);
-          setOrder(order.filter((item) => item.id_order !== orderId)); // Cập nhật dữ liệu sau khi xóa
-          setIsLoading(false);
+            const respone = await deleteOrderRequest(orderId, user.access_token);
+            setOrder(order.filter((item) => item.id_order !== orderId));
         } catch (error) {
-          console.error('Error deleting order:', error);
-          setIsLoading(false);
+            console.error('Error deleting order:', error);
         }
-      };
+    };
     const columns = [
         {
             title: 'id_user',
@@ -101,25 +101,25 @@ function AdminOrder() {
             ),
         },
         {
-          title: 'Hành động',
-          key: '9',
-          render: (_, record) => (
-            <Button
-              type="danger"
-              onClick={() => {
-                Modal.confirm({
-                  title: 'Xóa đơn hàng?',
-                  content: 'Bạn có chắc muốn xóa đơn hàng này?',
-                  okText: 'Xóa',
-                  okType: 'danger',
-                  onOk: () => handleDelete(record.id_order), // Gọi hàm xóa khi xác nhận
-                  cancelText: 'Hủy',
-                });
-              }}
-            >
-              Xóa
-            </Button>
-          ),
+            title: 'Hành động',
+            key: '9',
+            render: (_, record) => (
+                <Button
+                    type="danger"
+                    onClick={() => {
+                        Modal.confirm({
+                            title: 'Xóa đơn hàng?',
+                            content: 'Bạn có chắc muốn xóa đơn hàng này?',
+                            okText: 'Xóa',
+                            okType: 'danger',
+                            onOk: () => handleDelete(record.id_order),
+                            cancelText: 'Hủy',
+                        });
+                    }}
+                >
+                    Xóa
+                </Button>
+            ),
         },
     ];
     const data = order
@@ -140,9 +140,9 @@ function AdminOrder() {
     return (
         <div>
             <h4 style={{ marginBottom: '50px', marginTop: '20px' }}> Danh sách đơn hàng </h4>
-            <div>
+            <Loading isLoading={isLoading}>
                 <Table style={{ width: '1000px', height: '100%' }} columns={columns} dataSource={data} />
-            </div>
+            </Loading>
         </div>
     );
 }

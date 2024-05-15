@@ -1,10 +1,10 @@
 import { Table, Button, Space } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux';
 
 const ProductTable = ({ products, handleEditProduct, handleConfirmDelete }) => {
-    const user = useSelector((state) => state.user)
-
+    const user = useSelector((state) => state.user);
+    console.log(products);
     const productColumns = [
         { title: 'Product ID', dataIndex: 'id_product', key: 'id_product' },
         { title: 'Name', dataIndex: 'nameProduct', key: 'nameProduct' },
@@ -29,12 +29,25 @@ const ProductTable = ({ products, handleEditProduct, handleConfirmDelete }) => {
         {
             title: 'Actions',
             key: 'actions',
-            render: (text, record) => (
-                <Space>
-                    <Button icon={<EditOutlined />} onClick={() => handleEditProduct(record)} />
-                    <Button icon={<DeleteOutlined />} onClick={() => handleConfirmDelete(record.id_product, user.access_token)} />
-                </Space>
-            ),
+            render: (text, record) => {
+                console.log(record);
+                const imageUrl = record.url_picture?.data
+                    ? String.fromCharCode(...record.url_picture.data)
+                    : 'https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/_/t_m_19.png';
+                const product = {
+                    ...record,
+                    url_picture: imageUrl,
+                };
+                return (
+                    <Space>
+                        <Button icon={<EditOutlined />} onClick={() => handleEditProduct(product)} />
+                        <Button
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleConfirmDelete(record.id_product, user.access_token)}
+                        />
+                    </Space>
+                );
+            },
         },
     ];
 

@@ -1,11 +1,15 @@
 import { Table } from 'antd';
 import { useState, useEffect } from 'react';
 import { getAllUserRequest } from '../../apiService/apiService';
+import Loading from '../Loading/Loading';
 function AdminUser() {
     const [user, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const fetchApi = async () => {
+            setLoading(true);
             const data = await getAllUserRequest();
+            setLoading(false);
             setUsers(data.data);
         };
         fetchApi();
@@ -47,9 +51,9 @@ function AdminUser() {
     return (
         <div>
             <h4 style={{ marginBottom: '50px', marginTop: '20px' }}> Danh sách người dùng </h4>
-            <div>
+            <Loading isLoading={loading}>
                 <Table style={{ width: '1000px', height: '100%' }} columns={columns} dataSource={data} />
-            </div>
+            </Loading>
         </div>
     );
 }

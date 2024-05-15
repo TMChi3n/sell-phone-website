@@ -1,5 +1,5 @@
 import request from '../utils/request';
-import { error } from '../Components/Message/Message'
+import { error, success } from '../Components/Message/Message';
 
 // products
 export const getAllProductRequest = async () => {
@@ -82,7 +82,6 @@ export const loginRequest = async (data) => {
     }
 };
 
-
 export const logoutAccount = async (access_token) => {
     try {
         const res = await request.post(
@@ -99,7 +98,6 @@ export const logoutAccount = async (access_token) => {
         console.log(error);
     }
 };
-
 
 export const getDetailUserRequest = async (id, access_token) => {
     try {
@@ -214,17 +212,18 @@ export const getAllOderRequest = async (access_token) => {
         console.log(error);
     }
 };
-export const deleteOrderRequest = async (id) => {
-    const access_token = localStorage.getItem('access_token');
+export const deleteOrderRequest = async (id, access_token) => {
     try {
         const response = await request.delete(`/api/orders/${id}`, {
             headers: {
-                Authorization: `Bearer ${access_token}`, // Thêm token để xác thực
+                Authorization: `Bearer ${access_token}`,
             },
         });
-        return response.data; // Phản hồi dữ liệu nếu cần thiết
+        success('Xoá thành công');
+
+        return response.data;
     } catch (error) {
-        throw error; // Xử lý lỗi
+        error('Không thể xoá đơn hàng');
     }
 };
 
@@ -232,38 +231,39 @@ export const deleteOrderRequest = async (id) => {
 export const updateProductRequest = async (id, data) => {
     try {
         const res = await request.put(`/api/put/product/${id}`, data);
+        success('Sửa thành công');
+
         return res.data;
-    } catch (error) {
-        console.log(error);
+    } catch (e) {
+        error('Lỗi xảy ra: Vui lòng nhập đúng các trường ');
     }
 };
 export const createProductRequest = async (data, access_token) => {
     try {
-        const res = await request.post(`/api/post/product`, data,{
+        const res = await request.post(`/api/post/product`, data, {
             headers: {
                 Authorization: `Bearer ${access_token}`,
-
-            }
+            },
         });
+        success('Tạo thành công');
+
         return res.data;
-    } catch (error) {
-        console.log(error);
+    } catch (e) {
+        error('Vui lòng nhập đúng các trường');
     }
 };
 export const deleteProductRequest = async (id, access_token) => {
     try {
-        const res = await request.delete(`/api/delete/product/${id}`,{
+        const res = await request.delete(`/api/delete/product/${id}`, {
             headers: {
                 Authorization: `Bearer ${access_token}`,
-
-            }
+            },
         });
+        success('Xoá thành công');
+
         return res.data;
     } catch (e) {
         console.log(e);
-        error('Không thể xoá sản phẩm này')
+        error('Không thể xoá sản phẩm này');
     }
 };
-
-
-
